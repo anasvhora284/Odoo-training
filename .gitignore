@@ -2,16 +2,19 @@
 /.vscode
 
 # Python bytecode
-__pycache__/
+*/__pycache__/*
+*/__pycache__/*.pyc
 *.pyc
 *.pyo
 *.pyd
 
 # Odoo specific
-custom/estate/models/__pycache__/
-custom/estate/__pycache__/
-custom/estate_account/models/__pycache__/
-custom/estate_account/__pycache__/
+custom/estate/models/__pycache__
+custom/estate/__pycache__
+custom/estate_account/models/__pycache__
+custom/estate_account/__pycache__
+custom/estate/models/__pycache__
+custom/estate/models/__pycache__/*.pyc
 
 # Logs and databases
 *.log
@@ -23,5 +26,3 @@ custom/estate_account/__pycache__/
 .venv
 env/
 venv/
-custom/estate/models/__pycache__/__init__.cpython-312.pyc
-custom/estate/__pycache__/__init__.cpython-312.pyc
