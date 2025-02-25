@@ -1,0 +1,1 @@
+should i use .inherit_{details} suffix or not? (As per new it suggest not to use it)
