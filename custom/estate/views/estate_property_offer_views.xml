@@ -35,6 +35,11 @@
                         <field name="date_deadline"/>
                         <field name="status"/>
                         <field name="property_id"/>
+                        <field name="seller_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <button name="action_accept" type="object" string="Accept" invisible="status or seller_id != uid" class="oe_highlight"/>
+                        <button name="action_refuse" type="object" string="Refuse" invisible="status or seller_id != uid" class="oe_highlight"/>
                     </group>
                 </sheet>
             </form>

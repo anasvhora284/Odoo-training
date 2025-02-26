@@ -1,4 +1,4 @@
-from odoo import models, fields, api, exceptions
+from odoo import models, fields, api, exceptions, _
 from odoo.tools import date_utils, float_compare, float_is_zero
 from odoo.exceptions import UserError, ValidationError
 
@@ -108,6 +108,19 @@ class EstateProperty(models.Model):
                     'Only new and canceled properties can be deleted.'
                 )
 
+    def write(self, vals):
+        if not self._context.get('install_mode'):
+            for record in self:
+                if not self.env.user.has_group('estate.group_estate_manager'):
+                    if record.seller_id.id != self.env.user.id:
+                        raise exceptions.UserError(_("You can only modify your own properties!"))
+                    
+                    if record.offer_ids and set(vals.keys()) - {'state', 'buyer_id', 'selling_price'}:
+                        raise exceptions.UserError(_("You cannot modify property details once offers are received!"))
+        return super().write(vals)
+
     def unlink(self):
+        if not self.env.user.has_group('estate.estate_group_manager'):
+            raise exceptions.UserError(_("Only managers can delete properties!"))
         self._unlink_if_state_valid()
         return super().unlink()

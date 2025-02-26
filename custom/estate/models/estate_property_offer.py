@@ -1,4 +1,4 @@
-from odoo import models, fields, api, exceptions
+from odoo import models, fields, api, exceptions, _
 from odoo.tools import date_utils
 from odoo.exceptions import UserError
 
@@ -32,6 +32,12 @@ class EstatePropertyOffer(models.Model):
         string="Property Type",
         store=True,
         readonly=True
+    )
+    seller_id = fields.Many2one(
+        'res.users', 
+        related='property_id.seller_id', 
+        string='Seller',
+        store=True
     )
     
     # Compute the deadline
@@ -74,18 +80,31 @@ class EstatePropertyOffer(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            property_id = vals.get('property_id')
-            if property_id:
-                property = self.env['estate.property'].browse(property_id)
+            if 'property_id' in vals:
+                property = self.env['estate.property'].browse(vals['property_id'])
                 
-                if property.offer_ids:
-                    highest_offer = max(property.offer_ids.mapped('price'))
-                    if vals.get('price', 0) <= highest_offer:
-                        raise exceptions.UserError(
-                            f'Cannot create offer: there is already a higher offer (${highest_offer:,.2f})'
-                        )
+                # Skip validation during demo data installation
+                if not self._context.get('install_mode'):
+                    # Check if user is trying to make offer on their own property
+                    if property.seller_id.id == self.env.user.id:
+                        raise exceptions.UserError(_("You cannot make offers on your own properties!"))
                     
-                property.state = 'offer_received'
+                    # Check if property is in valid state
+                    if property.state not in ['new', 'offer_received']:
+                        raise exceptions.UserError(_("You can only make offers on new or offer received properties!"))
+                    
+                    # Check if offer is higher than existing ones
+                    if property.offer_ids:
+                        highest_offer = max(property.offer_ids.mapped('price'))
+                        if vals.get('price', 0) <= highest_offer:
+                            raise exceptions.UserError(
+                                _('Cannot create offer: there is already a higher offer (%(amount)s)',
+                                  amount=f"${highest_offer:,.2f}")
+                            )
+                
+                # Update property state
+                if property.state == 'new':
+                    property.sudo().write({'state': 'offer_received'})
         
         return super().create(vals_list)
 

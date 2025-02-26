@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Offers for properties 1-4 -->
+        <record id="offer_1" model="estate.property.offer">
+            <field name="price">450000.00</field>
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="property_id" ref="property_1"/>
+            <field name="validity">7</field>
+        </record>
+
+        <record id="offer_2" model="estate.property.offer">
+            <field name="price">280000.00</field>
+            <field name="partner_id" ref="base.res_partner_1"/>
+            <field name="property_id" ref="property_2"/>
+            <field name="validity">10</field>
+        </record>
+
+        <record id="offer_3" model="estate.property.offer">
+            <field name="price">460000.00</field>
+            <field name="partner_id" ref="base.res_partner_4"/>
+            <field name="property_id" ref="property_1"/>
+            <field name="validity">15</field>
+        </record>
+
+        <record id="offer_4" model="estate.property.offer">
+            <field name="price">400000.00</field>
+            <field name="partner_id" ref="base.res_partner_3"/>
+            <field name="property_id" ref="property_4"/>
+            <field name="validity">20</field>
+        </record>
+
+        <!-- Offers for properties 5-8 -->
+        <record id="offer_5" model="estate.property.offer">
+            <field name="price">800000.00</field>
+            <field name="partner_id" ref="base.res_partner_12"/>
+            <field name="property_id" ref="property_5"/>
+            <field name="validity">15</field>
+        </record>
+
+        <record id="offer_6" model="estate.property.offer">
+            <field name="price">820000.00</field>
+            <field name="partner_id" ref="base.res_partner_10"/>
+            <field name="property_id" ref="property_6"/>
+            <field name="validity">10</field>
+        </record>
+
+        <record id="offer_7" model="estate.property.offer">
+            <field name="price">700000.00</field>
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="property_id" ref="property_7"/>
+            <field name="validity">12</field>
+        </record>
+
+        <record id="offer_8" model="estate.property.offer">
+            <field name="price">830000.00</field>
+            <field name="partner_id" ref="base.res_partner_1"/>
+            <field name="property_id" ref="property_8"/>
+            <field name="validity">8</field>
+        </record>
+
+        <!-- Additional competitive offers -->
+        <record id="offer_9" model="estate.property.offer">
+            <field name="price">840000.00</field>
+            <field name="partner_id" ref="base.res_partner_3"/>
+            <field name="property_id" ref="property_5"/>
+            <field name="validity">10</field>
+        </record>
+
+        <record id="offer_10" model="estate.property.offer">
+            <field name="price">750000.00</field>
+            <field name="partner_id" ref="base.res_partner_4"/>
+            <field name="property_id" ref="property_7"/>
+            <field name="validity">15</field>
+        </record>
+    </data>
+</odoo> 
