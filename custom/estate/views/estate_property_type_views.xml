@@ -34,6 +34,7 @@
                 <h1>
                     <field name="name"/>
                 </h1>
+                <field name="company_id" invisible="0"/>
                 <notebook>
                     <page string="Properties">
                         <field name="property_ids">

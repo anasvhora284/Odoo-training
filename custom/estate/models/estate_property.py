@@ -98,3 +98,6 @@ class EstateProperty(models.Model):
                     f"The expected price is {record.expected_price}, "
                     f"so the selling price should be at least {record.expected_price * 0.9}"
                 )
+
+    def action_print_property(self):
+        return self.env.ref('estate.report_estate_property').report_action(self)

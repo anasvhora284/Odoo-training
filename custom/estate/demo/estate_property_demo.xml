@@ -3,67 +3,64 @@
     <data noupdate="1">
         <!-- Properties for Company 1 -->
         <record id="property_1" model="estate.property">
-            <field name="name">Modern Villa</field>
+            <field name="name">Modern Apartment</field>
             <field name="state">new</field>
-            <field name="description">Beautiful modern villa with garden</field>
+            <field name="description">A beautiful modern apartment in the heart of the city</field>
             <field name="postcode">12345</field>
             <field name="date_availability" eval="DateTime.now()"/>
-            <field name="expected_price">500000.00</field>
-            <field name="bedrooms">4</field>
-            <field name="living_area">200</field>
-            <field name="garden">true</field>
-            <field name="garden_area">100</field>
-            <field name="garden_orientation">north</field>
-            <field name="property_type_id" ref="property_type_villa"/>
-            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_luxury'), ref('property_tag_garden')])]"/>
+            <field name="expected_price">250000.00</field>
+            <field name="bedrooms">2</field>
+            <field name="living_area">80</field>
+            <field name="property_type_id" ref="property_type_apartment"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_affordable'), ref('property_tag_city_center')])]"/>
             <field name="seller_id" ref="base.user_admin"/>
             <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_2" model="estate.property">
-            <field name="name">City Apartment</field>
+            <field name="name">Suburban House</field>
             <field name="state">new</field>
-            <field name="description">Centrally located apartment</field>
-            <field name="postcode">54321</field>
+            <field name="description">A spacious family house in a quiet suburban area</field>
+            <field name="postcode">23456</field>
             <field name="date_availability" eval="DateTime.now()"/>
-            <field name="expected_price">300000.00</field>
-            <field name="bedrooms">2</field>
-            <field name="living_area">80</field>
-            <field name="property_type_id" ref="property_type_apartment"/>
-            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_affordable'), ref('property_tag_city_center')])]"/>
-            <field name="seller_id" ref="base.user_demo"/>
+            <field name="expected_price">350000.00</field>
+            <field name="bedrooms">4</field>
+            <field name="living_area">150</field>
+            <field name="garden">True</field>
+            <field name="garden_area">100</field>
+            <field name="garden_orientation">south</field>
+            <field name="property_type_id" ref="property_type_house"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_garden'), ref('property_tag_affordable')])]"/>
+            <field name="seller_id" ref="base.user_admin"/>
             <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_3" model="estate.property">
             <field name="name">Luxury Penthouse</field>
             <field name="state">new</field>
-            <field name="description">Stunning penthouse with panoramic views</field>
-            <field name="postcode">98765</field>
+            <field name="description">An exclusive penthouse with panoramic city views</field>
+            <field name="postcode">34567</field>
             <field name="date_availability" eval="DateTime.now()"/>
             <field name="expected_price">750000.00</field>
             <field name="bedrooms">3</field>
-            <field name="living_area">180</field>
+            <field name="living_area">200</field>
             <field name="property_type_id" ref="property_type_penthouse"/>
-            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_luxury'), ref('property_tag_sea_view')])]"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_luxury'), ref('property_tag_top_view'), ref('property_tag_city_center')])]"/>
             <field name="seller_id" ref="base.user_admin"/>
             <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_4" model="estate.property">
-            <field name="name">Family House</field>
+            <field name="name">Seaside Villa</field>
             <field name="state">new</field>
-            <field name="description">Perfect family home with large garden</field>
-            <field name="postcode">34567</field>
+            <field name="description">A beautiful villa with direct access to the beach</field>
+            <field name="postcode">45678</field>
             <field name="date_availability" eval="DateTime.now()"/>
-            <field name="expected_price">420000.00</field>
+            <field name="expected_price">950000.00</field>
             <field name="bedrooms">5</field>
-            <field name="living_area">250</field>
-            <field name="garden">True</field>
-            <field name="garden_area">200</field>
-            <field name="garden_orientation">south</field>
-            <field name="property_type_id" ref="property_type_house"/>
-            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_garden')])]"/>
+            <field name="living_area">300</field>
+            <field name="property_type_id" ref="property_type_villa"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_luxury'), ref('property_tag_sea_view'), ref('property_tag_premium')])]"/>
             <field name="seller_id" ref="base.user_admin"/>
             <field name="company_id" ref="base.main_company"/>
         </record>
@@ -79,24 +76,23 @@
             <field name="bedrooms">3</field>
             <field name="living_area">150</field>
             <field name="property_type_id" ref="property_type_apartment"/>
-            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_premium'), ref('property_tag_top_view')])]"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_premium'), ref('property_tag_city_center')])]"/>
             <field name="seller_id" ref="base.user_admin"/>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_6" model="estate.property">
             <field name="name">Shilp Epitome Tower B</field>
             <field name="state">new</field>
-            <field name="description">Compact luxury apartment in Tower B with city views</field>
+            <field name="description">Luxurious apartment with modern amenities in Tower B</field>
             <field name="postcode">67890</field>
             <field name="date_availability" eval="DateTime.now()"/>
-            <field name="expected_price">850000.00</field>
-            <field name="bedrooms">2</field>
-            <field name="living_area">120</field>
-            <field name="property_type_id" ref="property_type_apartment"/>
-            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_premium'), ref('property_tag_city_center')])]"/>
-            <field name="seller_id" ref="base.user_demo"/>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="expected_price">900000.00</field>
+            <field name="bedrooms">4</field>
+            <field name="living_area">180</field>
+            <field name="property_type_id" ref="estate.property_type_apartment"/>
+            <field name="seller_id" ref="base.user_admin"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_7" model="estate.property">
@@ -108,8 +104,8 @@
             <field name="expected_price">750000.00</field>
             <field name="bedrooms">4</field>
             <field name="living_area">200</field>
-            <field name="property_type_id" ref="property_type_penthouse"/>
-            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_luxury'), ref('property_tag_sea_view'), ref('property_tag_top_view')])]"/>
+            <field name="property_type_id" ref="estate.property_type_penthouse"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('estate.property_tag_luxury'), ref('estate.property_tag_sea_view'), ref('estate.property_tag_top_view')])]"/>
             <field name="seller_id" ref="base.user_admin"/>
             <field name="company_id" ref="base.main_company"/>
         </record>
@@ -126,9 +122,25 @@
             <field name="garden">True</field>
             <field name="garden_area">200</field>
             <field name="garden_orientation">south</field>
-            <field name="property_type_id" ref="property_type_villa"/>
-            <field name="tag_ids" eval="[(6, 0, [ref('property_tag_luxury'), ref('property_tag_garden'), ref('property_tag_premium')])]"/>
+            <field name="property_type_id" ref="estate.property_type_villa"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('estate.property_tag_luxury'), ref('estate.property_tag_garden'), ref('estate.property_tag_premium')])]"/>
             <field name="seller_id" ref="base.user_admin"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="property_9" model="estate.property">
+            <field name="name">Big Villa</field>
+            <field name="state">new</field>
+            <field name="description">A nice big villa</field>
+            <field name="postcode">12345</field>
+            <field name="date_availability">2020-02-02</field>
+            <field name="expected_price">1500000</field>
+            <field name="living_area">200</field>
+            <field name="garden_area">500</field>
+            <field name="garden">True</field>
+            <field name="active">True</field>
+            <field name="property_type_id" ref="estate.property_type_villa"/>
+            <field name="tag_ids" eval="[(6, 0, [ref('estate.property_tag_luxury'), ref('estate.property_tag_garden'), ref('estate.property_tag_premium')])]"/>
             <field name="company_id" ref="base.main_company"/>
         </record>
     </data>

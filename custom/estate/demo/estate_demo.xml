@@ -24,19 +24,19 @@
         <record id="property_type_villa" model="estate.property.type">
             <field name="name">Villa</field>
             <field name="sequence">4</field>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_type_penthouse" model="estate.property.type">
             <field name="name">Penthouse</field>
             <field name="sequence">5</field>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_type_land" model="estate.property.type">
             <field name="name">Land</field>
             <field name="sequence">6</field>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <!-- Property Tags for Company 1 -->
@@ -62,25 +62,25 @@
         <record id="property_tag_sea_view" model="estate.property.tag">
             <field name="name">Sea View</field>
             <field name="color">4</field>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_tag_garden" model="estate.property.tag">
             <field name="name">Garden</field>
             <field name="color">5</field>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_tag_top_view" model="estate.property.tag">
             <field name="name">Top View</field>
             <field name="color">6</field>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_tag_city_center" model="estate.property.tag">
             <field name="name">City Center</field>
             <field name="color">7</field>
-            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <!-- Properties -->

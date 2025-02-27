@@ -1,13 +1,14 @@
 from odoo import models, fields, api, exceptions
-from odoo.tools import date_utils
+from odoo.tools import date_utils, float_compare
 from odoo.exceptions import UserError
+from datetime import timedelta
 
 class EstatePropertyOffer(models.Model):
     _name = 'estate.property.offer'
     _description = 'Real Estate Property Offer'
     _order = 'price desc'
 
-    price = fields.Float(string="Price")
+    price = fields.Float(string="Price", required=True)
     status = fields.Selection(
         selection=[
             ('accepted', 'Accepted'),
@@ -39,6 +40,8 @@ class EstatePropertyOffer(models.Model):
         string='Seller',
         store=True
     )
+    company_id = fields.Many2one('res.company', string='Company', required=True, 
+                                default=lambda self: self.env.company)
     
     @api.depends('create_date', 'validity')
     def _compute_date_deadline(self):
@@ -63,9 +66,12 @@ class EstatePropertyOffer(models.Model):
                 property = self.env['estate.property'].browse(vals['property_id'])
                 if property.state not in ['new', 'offer_received']:
                     raise UserError("You cannot make offers on sold or canceled properties!")
-                if property.offer_ids:
+                
+                # Skip validation during demo data loading
+                if not self.env.context.get('install_mode') and property.offer_ids:
                     if vals.get('price', 0) <= max(property.offer_ids.mapped('price')):
                         raise UserError("The offer must be higher than %.2f" % max(property.offer_ids.mapped('price')))
+                
                 if property.state == 'new':
                     property.state = 'offer_received'
         return super().create(vals_list)

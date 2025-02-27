@@ -14,16 +14,18 @@
         * Manage property sales
     """,
     'category': 'Real Estate',
-    'depends': ['base'],
+    'depends': ['base', 'web'],
     'data': [
         'security/estate_security.xml',
         'security/ir.model.access.csv',
+        'reports/estate_property_report.xml',
+        'reports/estate_property_templates.xml',
+        'wizards/property_search_wizard_views.xml',
         'views/estate_property_offer_views.xml',
         'views/estate_property_views.xml',
         'views/estate_property_type_views.xml',
         'views/estate_property_tag_views.xml',
         'views/res_users_views.xml',
-        'wizards/property_search_wizard_views.xml',
         'views/estate_menus.xml',
     ],
     'demo': [
@@ -31,8 +33,8 @@
         'demo/estate_property_demo.xml',
         'demo/estate_property_offer_demo.xml',
     ],
-    'installable': True,
     'application': True,
+    'installable': True,
     'auto_install': False,
     'license': 'LGPL-3'
 }
