@@ -1,4 +1,4 @@
-from odoo import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions
 from odoo.tools import date_utils
 from odoo.exceptions import UserError
 
@@ -40,7 +40,6 @@ class EstatePropertyOffer(models.Model):
         store=True
     )
     
-    # Compute the deadline
     @api.depends('create_date', 'validity')
     def _compute_date_deadline(self):
         for record in self:
@@ -57,56 +56,33 @@ class EstatePropertyOffer(models.Model):
             else:
                 record.validity = (record.date_deadline - fields.Date.today()).days
 
-    def action_accept(self):
-        for record in self:
-            if record.property_id.offer_ids.filtered(lambda o: o.status == 'accepted' and o.id != record.id):
-                raise UserError("Another offer has already been accepted.")
-            
-            record.status = 'accepted'
-            record.property_id.buyer_id = record.partner_id
-            record.property_id.selling_price = record.price
-            record.property_id.state = 'offer_accepted'
-            record.property_id.offer_ids.filtered(lambda o: o.id != record.id).write({'status': 'refused'})
-        return True
-
-    def action_refuse(self):
-        for record in self:
-            record.status = 'refused'
-            record.property_id.state = 'offer_received'
-            record.property_id.buyer_id = False
-            record.property_id.selling_price = 0.0
-        return True
-
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if 'property_id' in vals:
                 property = self.env['estate.property'].browse(vals['property_id'])
-                
-                # Skip validation during demo data installation
-                if not self._context.get('install_mode'):
-                    # Check if user is trying to make offer on their own property
-                    if property.seller_id.id == self.env.user.id:
-                        raise exceptions.UserError(_("You cannot make offers on your own properties!"))
-                    
-                    # Check if property is in valid state
-                    if property.state not in ['new', 'offer_received']:
-                        raise exceptions.UserError(_("You can only make offers on new or offer received properties!"))
-                    
-                    # Check if offer is higher than existing ones
-                    if property.offer_ids:
-                        highest_offer = max(property.offer_ids.mapped('price'))
-                        if vals.get('price', 0) <= highest_offer:
-                            raise exceptions.UserError(
-                                _('Cannot create offer: there is already a higher offer (%(amount)s)',
-                                  amount=f"${highest_offer:,.2f}")
-                            )
-                
-                # Update property state
+                if property.state not in ['new', 'offer_received']:
+                    raise UserError("You cannot make offers on sold or canceled properties!")
+                if property.offer_ids:
+                    if vals.get('price', 0) <= max(property.offer_ids.mapped('price')):
+                        raise UserError("The offer must be higher than %.2f" % max(property.offer_ids.mapped('price')))
                 if property.state == 'new':
-                    property.sudo().write({'state': 'offer_received'})
-        
+                    property.state = 'offer_received'
         return super().create(vals_list)
+
+    def action_accept(self):
+        if self.property_id.offer_ids.filtered(lambda o: o.status == 'accepted' and o.id != self.id):
+            raise UserError("Another offer has already been accepted!")
+        self.status = 'accepted'
+        self.property_id.state = 'offer_accepted'
+        self.property_id.buyer_id = self.partner_id
+        self.property_id.selling_price = self.price
+        self.property_id.offer_ids.filtered(lambda o: o.id != self.id).write({'status': 'refused'})
+        return True
+
+    def action_refuse(self):
+        self.status = 'refused'
+        return True
 
     _sql_constraints = [
         ('check_price', 'CHECK(price > 0)',

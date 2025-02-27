@@ -1,76 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Property Types -->
+        <!-- Property Types for Company 1 -->
         <record id="property_type_residential" model="estate.property.type">
             <field name="name">Residential Complex</field>
             <field name="sequence">1</field>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_type_apartment" model="estate.property.type">
             <field name="name">Apartment</field>
             <field name="sequence">2</field>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_type_house" model="estate.property.type">
             <field name="name">House</field>
             <field name="sequence">3</field>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
+        <!-- Property Types for Company 2 -->
         <record id="property_type_villa" model="estate.property.type">
             <field name="name">Villa</field>
             <field name="sequence">4</field>
+            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
         </record>
 
         <record id="property_type_penthouse" model="estate.property.type">
             <field name="name">Penthouse</field>
             <field name="sequence">5</field>
+            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
         </record>
 
         <record id="property_type_land" model="estate.property.type">
             <field name="name">Land</field>
             <field name="sequence">6</field>
+            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
         </record>
 
-        <!-- Property Tags -->
+        <!-- Property Tags for Company 1 -->
         <record id="property_tag_affordable" model="estate.property.tag">
             <field name="name">Affordable</field>
             <field name="color">1</field>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_tag_luxury" model="estate.property.tag">
             <field name="name">Luxury</field>
             <field name="color">2</field>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
         <record id="property_tag_premium" model="estate.property.tag">
             <field name="name">Premium</field>
             <field name="color">3</field>
+            <field name="company_id" ref="base.main_company"/>
         </record>
 
+        <!-- Property Tags for Company 2 -->
         <record id="property_tag_sea_view" model="estate.property.tag">
             <field name="name">Sea View</field>
             <field name="color">4</field>
+            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
         </record>
 
         <record id="property_tag_garden" model="estate.property.tag">
             <field name="name">Garden</field>
             <field name="color">5</field>
+            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
         </record>
 
         <record id="property_tag_top_view" model="estate.property.tag">
             <field name="name">Top View</field>
             <field name="color">6</field>
+            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
         </record>
 
         <record id="property_tag_city_center" model="estate.property.tag">
             <field name="name">City Center</field>
             <field name="color">7</field>
+            <field name="company_id" eval="ref('base.company_2') or ref('base.main_company')"/>
         </record>
 
-        <!-- Assign demo user to estate user group -->
-        <record id="base.user_demo" model="res.users">
-            <field name="groups_id" eval="[(4, ref('estate.group_estate_user'))]"/>
+        <!-- Properties -->
+        <record id="property_9" model="estate.property">
+            <field name="name">Big Villa</field>
+            <field name="state">new</field>
+            <field name="description">A nice big villa</field>
+            <field name="postcode">12345</field>
+            <field name="date_availability">2020-02-02</field>
+            <field name="expected_price">1500000</field>
+            <field name="living_area">200</field>
+            <field name="garden_area">500</field>
+            <field name="garden">True</field>
+            <field name="active">True</field>
+            <field name="property_type_id" ref="property_type_villa"/>
         </record>
     </data>
 </odoo> 

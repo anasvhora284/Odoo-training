@@ -1,1 +1,4 @@
 should i use .inherit_{details} suffix or not? (As per new it suggest not to use it)
+
+company wise estate data!
+user wise estate data!

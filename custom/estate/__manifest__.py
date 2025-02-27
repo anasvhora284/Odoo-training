@@ -23,6 +23,7 @@
         'views/estate_property_type_views.xml',
         'views/estate_property_tag_views.xml',
         'views/res_users_views.xml',
+        'wizards/property_search_wizard_views.xml',
         'views/estate_menus.xml',
     ],
     'demo': [

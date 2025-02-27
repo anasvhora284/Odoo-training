@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Offers for properties 1-4 -->
+        <!-- Offers for Company 1 properties -->
         <record id="offer_1" model="estate.property.offer">
             <field name="price">450000.00</field>
             <field name="partner_id" ref="base.res_partner_2"/>
@@ -19,7 +19,7 @@
         <record id="offer_3" model="estate.property.offer">
             <field name="price">460000.00</field>
             <field name="partner_id" ref="base.res_partner_4"/>
-            <field name="property_id" ref="property_1"/>
+            <field name="property_id" ref="property_3"/>
             <field name="validity">15</field>
         </record>
 
@@ -30,7 +30,7 @@
             <field name="validity">20</field>
         </record>
 
-        <!-- Offers for properties 5-8 -->
+        <!-- Offers for Company 2 properties -->
         <record id="offer_5" model="estate.property.offer">
             <field name="price">800000.00</field>
             <field name="partner_id" ref="base.res_partner_12"/>
@@ -45,6 +45,7 @@
             <field name="validity">10</field>
         </record>
 
+        <!-- Additional competitive offers -->
         <record id="offer_7" model="estate.property.offer">
             <field name="price">700000.00</field>
             <field name="partner_id" ref="base.res_partner_2"/>
@@ -59,7 +60,6 @@
             <field name="validity">8</field>
         </record>
 
-        <!-- Additional competitive offers -->
         <record id="offer_9" model="estate.property.offer">
             <field name="price">840000.00</field>
             <field name="partner_id" ref="base.res_partner_3"/>

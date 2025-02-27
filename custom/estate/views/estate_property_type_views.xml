@@ -13,6 +13,7 @@
             <list string="Property Types">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
+                <field name="property_count" string="Properties Count"/>
             </list>
         </field>
     </record>

@@ -1,4 +1,4 @@
-from odoo import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions
 from odoo.tools import date_utils, float_compare, float_is_zero
 from odoo.exceptions import UserError, ValidationError
 
@@ -46,6 +46,7 @@ class EstateProperty(models.Model):
         string="Best Offer",
         compute="_compute_best_price"
     )
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company)
 
     _sql_constraints = [
         ('check_expected_price', 'CHECK(expected_price > 0)',
@@ -54,19 +55,16 @@ class EstateProperty(models.Model):
          'Selling price must be positive!')
     ]
 
-    # Compute the best offer price
     @api.depends('offer_ids.price')
     def _compute_best_price(self):
         for record in self:
             record.best_price = max(record.offer_ids.mapped('price')) if record.offer_ids else 0.0
 
-    # Compute the total area
     @api.depends('living_area', 'garden_area')
     def _compute_total_area(self):
         for record in self:
             record.total_area = (record.living_area or 0) + (record.garden_area or 0)
 
-    # on change method to update garden area & orientation
     @api.onchange('garden')
     def _onchange_garden(self):
         if not self.garden:
@@ -100,27 +98,3 @@ class EstateProperty(models.Model):
                     f"The expected price is {record.expected_price}, "
                     f"so the selling price should be at least {record.expected_price * 0.9}"
                 )
-
-    def _unlink_if_state_valid(self):
-        for record in self:
-            if record.state not in ['new', 'canceled']:
-                raise exceptions.UserError(
-                    'Only new and canceled properties can be deleted.'
-                )
-
-    def write(self, vals):
-        if not self._context.get('install_mode'):
-            for record in self:
-                if not self.env.user.has_group('estate.group_estate_manager'):
-                    if record.seller_id.id != self.env.user.id:
-                        raise exceptions.UserError(_("You can only modify your own properties!"))
-                    
-                    if record.offer_ids and set(vals.keys()) - {'state', 'buyer_id', 'selling_price'}:
-                        raise exceptions.UserError(_("You cannot modify property details once offers are received!"))
-        return super().write(vals)
-
-    def unlink(self):
-        if not self.env.user.has_group('estate.estate_group_manager'):
-            raise exceptions.UserError(_("Only managers can delete properties!"))
-        self._unlink_if_state_valid()
-        return super().unlink()
