@@ -26,9 +26,11 @@
                         <h1>
                             <field name="name"/>
                         </h1>
+                        <field name="company_id" groups="estate.group_my_custom_manager"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
+
 </odoo> 

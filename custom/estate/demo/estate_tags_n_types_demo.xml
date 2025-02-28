@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Company 1 Types -->
+        <record id="property_type_residential" model="estate.property.type">
+            <field name="name">Residential Complex</field>
+            <field name="sequence">1</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_type_apartment" model="estate.property.type">
+            <field name="name">Apartment</field>
+            <field name="sequence">2</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_type_house" model="estate.property.type">
+            <field name="name">House</field>
+            <field name="sequence">3</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_type_villa" model="estate.property.type">
+            <field name="name">Villa</field>
+            <field name="sequence">4</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_type_penthouse" model="estate.property.type">
+            <field name="name">Penthouse</field>
+            <field name="sequence">5</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_type_land" model="estate.property.type">
+            <field name="name">Land</field>
+            <field name="sequence">6</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <!-- Company 1 Tags -->
+        <record id="property_tag_affordable" model="estate.property.tag">
+            <field name="name">Affordable</field>
+            <field name="color">1</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_tag_luxury" model="estate.property.tag">
+            <field name="name">Luxury</field>
+            <field name="color">2</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_tag_premium" model="estate.property.tag">
+            <field name="name">Premium</field>
+            <field name="color">3</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_tag_sea_view" model="estate.property.tag">
+            <field name="name">Sea View</field>
+            <field name="color">4</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_tag_garden" model="estate.property.tag">
+            <field name="name">Garden</field>
+            <field name="color">5</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_tag_top_view" model="estate.property.tag">
+            <field name="name">Top View</field>
+            <field name="color">6</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="property_tag_city_center" model="estate.property.tag">
+            <field name="name">City Center</field>
+            <field name="color">7</field>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <!-- Company 2 Types -->
+        <record id="property_type_residential_company_2" model="estate.property.type">
+            <field name="name">Residential Complex</field>
+            <field name="sequence">1</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_type_apartment_company_2" model="estate.property.type">
+            <field name="name">Apartment</field>
+            <field name="sequence">2</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_type_house_company_2" model="estate.property.type">
+            <field name="name">House</field>
+            <field name="sequence">3</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_type_villa_company_2" model="estate.property.type">
+            <field name="name">Villa</field>
+            <field name="sequence">4</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_type_penthouse_company_2" model="estate.property.type">
+            <field name="name">Penthouse</field>
+            <field name="sequence">5</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_type_land_company_2" model="estate.property.type">
+            <field name="name">Land</field>
+            <field name="sequence">6</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <!-- Company 2 Tags -->
+        <record id="property_tag_affordable_company_2" model="estate.property.tag">
+            <field name="name">Affordable</field>
+            <field name="color">1</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_tag_luxury_company_2" model="estate.property.tag">
+            <field name="name">Luxury</field>
+            <field name="color">2</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_tag_premium_company_2" model="estate.property.tag">
+            <field name="name">Premium</field>
+            <field name="color">3</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_tag_sea_view_company_2" model="estate.property.tag">
+            <field name="name">Sea View</field>
+            <field name="color">4</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_tag_garden_company_2" model="estate.property.tag">
+            <field name="name">Garden</field>
+            <field name="color">5</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_tag_top_view_company_2" model="estate.property.tag">
+            <field name="name">Top View</field>
+            <field name="color">6</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+
+        <record id="property_tag_city_center_company_2" model="estate.property.tag">
+            <field name="name">City Center</field>
+            <field name="color">7</field>
+            <field name="company_id" ref="real_estate_company_2"/>
+        </record>
+    </data>
+</odoo> 

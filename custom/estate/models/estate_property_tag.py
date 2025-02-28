@@ -10,6 +10,6 @@ class EstatePropertyTag(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company)
 
     _sql_constraints = [
-        ('unique_tag_name', 'UNIQUE(name)',
-         'Property tag name must be unique!')
+        ('unique_tag_name_company', 'UNIQUE(name, company_id)',
+         'Property tag name must be unique per company!')
     ]

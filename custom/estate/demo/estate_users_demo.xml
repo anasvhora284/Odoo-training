@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Companies -->
+        <record id="real_estate_company_1" model="res.company">
+            <field name="name">Real Estate Company_1</field>
+            <field name="currency_id" ref="base.USD"/>
+        </record>
+
+        <record id="real_estate_company_2" model="res.company">
+            <field name="name">Real Estate Company_2</field>
+            <field name="currency_id" ref="base.USD"/>
+        </record>
+
+        <!-- Users -->
+        <record id="estate_user_demo" model="res.users">
+            <field name="login">estate_user</field>
+            <field name="password">estate_user</field>
+            <field name="name">Estate User</field>
+            <field name="groups_id" eval="[(4, ref('estate.group_custom_user'))]"/>
+            <field name="company_ids" eval="[(4, ref('real_estate_company_1')), (4, ref('real_estate_company_2'))]"/>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+
+        <record id="estate_manager_demo" model="res.users">
+            <field name="login">estate_manager</field>
+            <field name="password">estate_manager</field>
+            <field name="name">Estate Manager</field>
+            <field name="groups_id" eval="[(4, ref('estate.group_my_custom_manager'))]"/>
+            <field name="company_ids" eval="[(4, ref('real_estate_company_1')), (4, ref('real_estate_company_2'))]"/>
+            <field name="company_id" ref="real_estate_company_1"/>
+        </record>
+    </data>
+</odoo> 

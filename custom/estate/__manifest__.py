@@ -29,9 +29,10 @@
         'views/estate_menus.xml',
     ],
     'demo': [
-        'demo/estate_demo.xml',
+        'demo/estate_users_demo.xml',
+        'demo/estate_tags_n_types_demo.xml',
         'demo/estate_property_demo.xml',
-        'demo/estate_property_offer_demo.xml',
+        'demo/estate_offer_demo.xml',
     ],
     'application': True,
     'installable': True,

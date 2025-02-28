@@ -34,7 +34,7 @@
                 <h1>
                     <field name="name"/>
                 </h1>
-                <field name="company_id" invisible="0"/>
+                <field name="company_id" groups="estate.group_my_custom_manager"/>
                 <notebook>
                     <page string="Properties">
                         <field name="property_ids">

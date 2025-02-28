@@ -20,7 +20,7 @@
 				<field name="expected_price" string="Expected Price"/>
 				<field name="selling_price" string="Selling Price"/>
 				<field name="date_availability" string="Available from" optional="hide"/>
-				<field name="company_id" groups="base.group_multi_company" optional="show"/>
+				<field name="company_id" groups="estate.group_my_custom_manager" optional="show"/>
 			</list>
 		</field>
 	</record>
@@ -90,7 +90,7 @@
 							<group class="p-3">
 								<field name="buyer_id"/>
 								<field name="seller_id"/>
-								<field name="company_id" groups="base.group_multi_company"/>
+								<field name="company_id" groups="estate.group_my_custom_manager"/>
 							</group>
 						</page>
 					</notebook>
@@ -145,12 +145,12 @@
 				<field name="expected_price" string="Expected Price"/>
 				<field name="selling_price" string="Selling Price"/>
 				<field name="date_availability" string="available From"/>
-				<field name="company_id" groups="base.group_multi_company"/>
+				<field name="company_id" groups="estate.group_my_custom_manager"/>
 				<separator/>
 				<filter string="State" name="state" domain="['|', ('state', '=', 'new'), ('state', '=', 'offer_received')]"/>
 				<group expand="1" string="Group By">
 					<filter string="Postcode" name="postcode" context="{'group_by':'postcode'}"/>
-					<filter string="Company" name="company_id" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+					<filter string="Company" name="company_id" context="{'group_by': 'company_id'}" groups="estate.group_my_custom_manager"/>
 				</group>
 				<filter string="Available" name="available" domain="[('state', 'in', ['new'])]"/>
 			</search>

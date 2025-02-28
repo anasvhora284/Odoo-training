@@ -14,8 +14,8 @@ class EstatePropertyType(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company)
 
     _sql_constraints = [
-        ('unique_type_name', 'UNIQUE(name)',
-         'Property type name must be unique!')
+        ('unique_type_name_company', 'UNIQUE(name, company_id)',
+         'Property type name must be unique per company!')
     ]
 
     @api.depends('offer_ids')
