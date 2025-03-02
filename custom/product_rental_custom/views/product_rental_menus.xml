@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_rental_root" name="Rentals">
+        <menuitem id="menu_rental_products" name="Products" action="product_rental_action"/>
+
+        <menuitem id="menu_rental_requests" name="Rental Requests" action="action_rental_request"/>
+
+        <menuitem id="menu_rental_history" name="Rental History" action="action_rental_history" groups="product_rental_custom.group_rental_manager"/>
+
+        <menuitem id="menu_rental_config" name="Configuration" groups="product_rental_custom.group_rental_manager"/>
+    </menuitem>
+</odoo>

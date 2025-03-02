@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_rental_action" model="ir.actions.act_window">
+        <field name="name">Product Rentals</field>
+        <field name="res_model">product.rental</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <record id="product_rental_view_form" model="ir.ui.view">
+        <field name="name">product.rental.form</field>
+        <field name="model">product.rental</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_requests" icon="fa-paper-plane">
+                            <field string="Requests" name="request_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_history" icon="fa-history">
+                            <field string="History" name="history_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <field name="product_image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="product_id" placeholder="Product" options="{'no_create': True}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="rental_price" groups="product_rental_custom.group_rental_manager" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="product_quantity" groups="product_rental_custom.group_rental_manager"/>
+                            <field name="available_quantity"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rental Requests" name="rental_requests">
+                            <field name="request_ids" readonly="1">
+                                <list>
+                                    <field name="customer_id"/>
+                                    <field name="quantity"/>
+                                    <field name="rental_start_date"/>
+                                    <field name="rental_end_date"/>
+                                    <field name="total_price"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Rental History" name="rental_history">
+                            <field name="history_ids" readonly="1">
+                                <list>
+                                    <field name="customer_id"/>
+                                    <field name="quantity"/>
+                                    <field name="rental_start_date"/>
+                                    <field name="rental_end_date"/>
+                                    <field name="total_price"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button string="Save" type="object" name="action_save" class="btn btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="product_rental_view_list" model="ir.ui.view">
+        <field name="name">product.rental.list</field>
+        <field name="model">product.rental</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="product_id"/>
+                <field name="rental_price"/>
+                <field name="available_quantity"/>
+                <field name="product_quantity" groups="product_rental_custom.group_rental_manager"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="product_rental_view_kanban" model="ir.ui.view">
+        <field name="name">product.rental.kanban</field>
+        <field name="model">product.rental</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_card">
+                            <div class="o_kanban_details">
+                                <strong>
+                                    <field name="product_id"/>
+                                </strong>
+                                <div>
+                                    <field name="rental_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </div>
+                                <div>
+                                    <field name="available_quantity"/>
+                                    <span>Available</span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="product_rental_view_search" model="ir.ui.view">
+        <field name="name">product.rental.search</field>
+        <field name="model">product.rental</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <filter string="Available" name="available" domain="[('available_quantity', '>', 0)]"/>
+                <group string="Group By">
+                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
