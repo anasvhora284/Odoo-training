@@ -17,8 +17,11 @@
             <field name="login">estate_user</field>
             <field name="password">estate_user</field>
             <field name="name">Estate User</field>
-            <field name="groups_id" eval="[(4, ref('estate.group_custom_user'))]"/>
-            <field name="company_ids" eval="[(4, ref('real_estate_company_1')), (4, ref('real_estate_company_2'))]"/>
+            <field name="groups_id" eval="[(6, 0, [
+                ref('base.group_user'),
+                ref('estate.group_custom_user')
+            ])]"/>
+            <field name="company_ids" eval="[(6, 0, [ref('real_estate_company_1'), ref('real_estate_company_2')])]"/>
             <field name="company_id" ref="real_estate_company_1"/>
         </record>
 
@@ -26,8 +29,11 @@
             <field name="login">estate_manager</field>
             <field name="password">estate_manager</field>
             <field name="name">Estate Manager</field>
-            <field name="groups_id" eval="[(4, ref('estate.group_my_custom_manager'))]"/>
-            <field name="company_ids" eval="[(4, ref('real_estate_company_1')), (4, ref('real_estate_company_2'))]"/>
+            <field name="groups_id" eval="[(6, 0, [
+                ref('base.group_user'),
+                ref('estate.group_my_custom_manager')
+            ])]"/>
+            <field name="company_ids" eval="[(6, 0, [ref('real_estate_company_1'), ref('real_estate_company_2')])]"/>
             <field name="company_id" ref="real_estate_company_1"/>
         </record>
     </data>

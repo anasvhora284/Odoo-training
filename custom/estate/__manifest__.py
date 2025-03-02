@@ -29,6 +29,7 @@
         'views/estate_menus.xml',
     ],
     'demo': [
+        'security/estate_security.xml',
         'demo/estate_users_demo.xml',
         'demo/estate_tags_n_types_demo.xml',
         'demo/estate_property_demo.xml',
