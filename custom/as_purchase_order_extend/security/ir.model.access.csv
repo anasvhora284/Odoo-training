@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_order_import_export_log_user,purchase.order.import.export.log.user,model_purchase_order_import_export_log,purchase.group_purchase_user,1,1,1,0
+access_purchase_order_import_export_log_manager,purchase.order.import.export.log.manager,model_purchase_order_import_export_log,purchase.group_purchase_manager,1,1,1,1
+access_purchase_order_operations_user,purchase.order.operations.user,model_purchase_order_operations,purchase.group_purchase_user,1,1,1,1

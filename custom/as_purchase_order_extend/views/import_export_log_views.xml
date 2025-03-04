@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_purchase_order_import_export_log" model="ir.actions.act_window">
+        <field name="name">Import/Export Logs</field>
+        <field name="res_model">purchase.order.import.export.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No import/export logs found
+            </p>
+            <p>
+                Import or export purchase orders to see the logs here.
+            </p>
+        </field>
+    </record>
+    
+    <record id="view_purchase_order_import_export_log_list" model="ir.ui.view">
+        <field name="name">purchase.order.import.export.log.list</field>
+        <field name="model">purchase.order.import.export.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="operation_type"/>
+                <field name="file_name"/>
+                <field name="date_time"/>
+                <field name="status"/>
+                <field name="user_id"/>
+                <field name="total_orders"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_import_export_log_form" model="ir.ui.view">
+        <field name="name">purchase.order.import.export.log.form</field>
+        <field name="model">purchase.order.import.export.log</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="operation_type"/>
+                            <field name="file_name"/>
+                            <field name="date_time"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="user_id"/>
+                            <field name="total_orders"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Purchase Orders" name="purchase_orders">
+                            <field name="purchase_order_ids"/>
+                        </page>
+                        <page string="Error Message" name="error_message" hide="[error_message == '']">
+                            <field name="error_message"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_import_export_log_search" model="ir.ui.view">
+        <field name="name">purchase.order.import.export.log.search</field>
+        <field name="model">purchase.order.import.export.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="file_name"/>
+                <field name="user_id"/>
+                <filter string="Import" name="import" domain="[('operation_type', '=', 'import')]"/>
+                <filter string="Export" name="export" domain="[('operation_type', '=', 'export')]"/>
+                <filter string="Success" name="success" domain="[('status', '=', 'success')]"/>
+                <filter string="Failed" name="failed" domain="[('status', '=', 'failed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Operation Type" name="group_by_operation_type" context="{'group_by': 'operation_type'}"/>
+                    <filter string="Status" name="group_by_status" context="{'group_by': 'status'}"/>
+                    <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo> 

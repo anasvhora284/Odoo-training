@@ -4,6 +4,7 @@
         <field name="name">Rental Requests</field>
         <field name="res_model">product.rental.request</field>
         <field name="view_mode">list,form</field>
+        <field name="domain">[('customer_id', '=', uid)]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first rental request!
@@ -19,7 +20,7 @@
                 <header>
                     <button name="action_approve" string="Approve" type="object" class="oe_highlight" groups="product_rental_custom.group_rental_manager" invisible="state not in ['draft']"/>
                     <button name="action_reject" string="Reject" type="object" groups="product_rental_custom.group_rental_manager" invisible="state not in ['draft']"/>
-                    <button name="action_return" string="Return" type="object" groups="product_rental_custom.group_rental_manager" invisible="state not in ['approved']"/>
+                    <button name="action_return" string="Return" type="object" groups="product_rental_custom.group_rental_manager,product_rental_custom.group_rental_user" invisible="state not in ['approved']" domain="[(customer_id, '=', uid)]"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -30,6 +31,7 @@
                             </field>
                             <field name="customer_id" groups="product_rental_custom.group_rental_manager"/>
                             <field name="quantity"/>
+                            <field name="available_quantity" readonly="0" groups="product_rental_custom.group_rental_manager"/>
                             <field name="rental_duration"/>
                         </group>
                         <group>

@@ -1,5 +1,5 @@
 # VS Code
-/.vscode
+.vscode
 
 # Python bytecode
 */__pycache__/*

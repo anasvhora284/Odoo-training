@@ -29,8 +29,8 @@
                     <group>
                         <group>
                             <field name="rental_price" groups="product_rental_custom.group_rental_manager" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                            <field name="product_quantity" groups="product_rental_custom.group_rental_manager"/>
-                            <field name="available_quantity"/>
+                            <field name="product_quantity" string="New Stock to Add" groups="product_rental_custom.group_rental_manager"/>
+                            <field name="available_quantity" groups="product_rental_custom.group_rental_manager"/>
                         </group>
                         <group>
                             <field name="company_id" groups="base.group_multi_company"/>

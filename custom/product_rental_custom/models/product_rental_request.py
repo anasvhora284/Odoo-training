@@ -15,6 +15,7 @@ class ProductRentalRequest(models.Model):
         default=lambda self: self.env.user.partner_id,
     )
     quantity = fields.Integer(string="Quantity", required=True, default=1)
+    available_quantity = fields.Integer(related='rental_id.available_quantity', string="Available Quantity")
     rental_duration = fields.Integer(string="Duration (Days)", required=True, default=30)
     rental_start_date = fields.Date(string="Start Date", required=True, default=fields.Date.today)
     rental_end_date = fields.Date(string="End Date", compute='_compute_end_date', store=True)
@@ -70,6 +71,7 @@ class ProductRentalRequest(models.Model):
     def action_return(self):
         self.ensure_one()
         self.state = 'returned'
+        self.rental_id.available_quantity += self.quantity
         return True
 
     @api.model

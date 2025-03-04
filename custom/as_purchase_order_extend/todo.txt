@@ -1,0 +1,20 @@
+Main Functionality
+- Import Purchase Order from Excel file
+- Export Purchase Order to Excel file
+- Show logs of import and export
+
+location:
+- In purchase module.
+
+1. Make a new sub-menu in purchase module inside Orders menu called "Import/Export Purchase Order".
+2. Add two buttons in the new sub-menu: "Import Purchase Order" and "Export Purchase Order".
+3. Add a new action in the new sub-menu called "Import Purchase Order".
+4. Add a new action in the new sub-menu called "Export Purchase Order".
+5. Add a new action in the new sub-menu called "Show Logs".
+6. On clicking import purchase order, a popup will appear with a sample file & input to upload the Excel file & the PO should be created automatically.
+7. On clicking export purchase order, a popup will appear with a file to download the Excel file (simple the history of PO).
+8. On clicking show logs, a popup will appear with the logs of import and export if only one directly open the form view of purchase order else open the list view of purchase order.
+9. logs will show the details of import and export like file name, date and time, status, error message, etc.
+10. On clicking import purchase order, the purchase order will be imported from the Excel file and the logs will be shown.
+11. On clicking export purchase order, the purchase order will be exported to the Excel file and the logs will be shown.
+12. On clicking show logs, the logs will be shown.
