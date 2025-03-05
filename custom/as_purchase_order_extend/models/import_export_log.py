@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from odoo import models, fields, api
 from datetime import datetime
 
@@ -32,7 +34,6 @@ class ImportExportLog(models.Model):
 
     @api.model
     def create_log(self, vals):
-        """Helper method to create logs easily"""
         return self.create({
             'name': vals.get('name', 'Purchase Order Operation'),
             'operation_type': vals.get('operation_type'),

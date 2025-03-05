@@ -2,20 +2,19 @@ import base64
 from io import BytesIO
 from datetime import datetime
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
 import pandas as pd
 
 class PurchaseOrderOperations(models.TransientModel):
     _name = 'purchase.order.operations'
-    _description = 'Purchase Order Operations'
+    _description = 'Import Purchase Order'
 
-    operation = fields.Selection([
-        ('import', 'Import Purchase Orders'),
-        ('export', 'Export Purchase Orders')
-    ], string='Operation', required=True, default='import')
-    
     file = fields.Binary(string='File', attachment=True)
     file_name = fields.Char(string='File Name')
+    state = fields.Selection([
+        ('draft', 'RFQ'),
+        ('sent', 'RFQ Sent'),
+        ('purchase', 'Purchase Order')
+    ], string='Purchase Order State', default='draft', required=True)
     
     template_file = fields.Binary(string='Template File', readonly=True)
     template_file_name = fields.Char(string='Template File Name', readonly=True)
@@ -25,7 +24,7 @@ class PurchaseOrderOperations(models.TransientModel):
         return [
             'Vendor Name', 'Product Name', 'Description', 'Quantity', 
             'Unit Price', 'Taxes', 'Scheduled Date', 'Payment Terms', 
-            'Currency', 'Reference', 'Status'
+            'Currency', 'Reference'
         ]
 
     def action_download_template(self):
@@ -42,7 +41,6 @@ class PurchaseOrderOperations(models.TransientModel):
             'Payment Terms': ['30 Days'],
             'Currency': ['USD'],
             'Reference': ['PO/2024/001'],
-            'Status': ['RFQ']
         }
         
         df = pd.DataFrame(data, columns=columns)
@@ -65,10 +63,7 @@ class PurchaseOrderOperations(models.TransientModel):
     def action_proceed(self):
         self.ensure_one()
         try:
-            if self.operation == 'import':
-                return self._import_purchase_orders()
-            else:
-                return self._export_purchase_orders()
+            return self._import_purchase_orders()
         except Exception as e:
             return self._create_log_and_return_error(str(e))
 
@@ -76,10 +71,10 @@ class PurchaseOrderOperations(models.TransientModel):
         if created_pos is None:
             created_pos = []
         if operation_type is None:
-            operation_type = self.operation
+            operation_type = 'import'
 
         self.env['purchase.order.import.export.log'].create_log({
-            'name': 'Import/Export Purchase Orders',
+            'name': 'Import Purchase Orders',
             'operation_type': operation_type,
             'file_name': self.file_name,
             'status': 'failed',
@@ -99,12 +94,9 @@ class PurchaseOrderOperations(models.TransientModel):
         }
 
     def _import_purchase_orders(self):
-        self.ensure_one()
         if not self.file:
-            return self._create_log_and_return_error(_('Please select a file to import.'))
+            return self._create_log_and_return_error(_('Please upload a file first.'))
 
-        created_pos = []
-        
         try:
             excel_file = BytesIO(base64.b64decode(self.file))
             try:
@@ -116,22 +108,22 @@ class PurchaseOrderOperations(models.TransientModel):
             if not all(col in df.columns for col in required_columns):
                 return self._create_log_and_return_error(_('Invalid file format. Please use the template provided.'))
 
-            current_vendor = None
-            current_po = None
+            created_pos = []
+            current_po = False
+            current_vendor = False
 
             for index, row in df.iterrows():
                 try:
                     vendor_name = row['Vendor Name']
                     product_name = row['Product Name']
+                    description = row.get('Description', '')
                     quantity = float(row['Quantity'])
                     price_unit = float(row['Unit Price'])
-                    status = row.get('Status', 'RFQ')
-
-                    if status not in ['RFQ', 'RFQ Sent', 'Purchase Order']:
-                        return self._create_log_and_return_error(
-                            _('Invalid status in row %d: %s. Allowed values are: RFQ, RFQ Sent, Purchase Order.') 
-                            % (index + 2, status)
-                        )
+                    taxes = row.get('Taxes', '')
+                    scheduled_date = row.get('Scheduled Date')
+                    payment_terms = row.get('Payment Terms')
+                    currency = row.get('Currency')
+                    reference = row.get('Reference')
 
                     vendor = self.env['res.partner'].search([
                         ('name', '=', vendor_name),
@@ -145,11 +137,23 @@ class PurchaseOrderOperations(models.TransientModel):
                         if current_po:
                             created_pos.append(current_po.id)
                         
+                        payment_term = False
+                        if payment_terms:
+                            payment_term = self.env['account.payment.term'].search([('name', '=', payment_terms)], limit=1)
+                        
+                        currency_id = False
+                        if currency:
+                            currency_id = self.env['res.currency'].search([('name', '=', currency)], limit=1)
+                        
                         current_vendor = vendor
                         current_po = self.env['purchase.order'].create({
                             'partner_id': vendor.id,
                             'date_order': datetime.now(),
-                            'state': 'draft' if status == 'RFQ' else 'sent' if status == 'RFQ Sent' else 'purchase'
+                            'state': 'draft',
+                            'payment_term_id': payment_term and payment_term.id or False,
+                            'currency_id': currency_id and currency_id.id or False,
+                            'partner_ref': reference or False,
+                            'date_planned': scheduled_date or datetime.now()
                         })
 
                     product = self.env['product.product'].search([
@@ -159,30 +163,48 @@ class PurchaseOrderOperations(models.TransientModel):
                     if not product:
                         return self._create_log_and_return_error(_(f'Product not found in row {index + 2}: {product_name}'))
 
+                    taxes_ids = []
+                    if taxes:
+                        tax_names = [tax.strip() for tax in taxes.split(',')]
+                        for tax_name in tax_names:
+                            tax = self.env['account.tax'].search([
+                                ('name', '=', tax_name),
+                                ('type_tax_use', '=', 'purchase')
+                            ], limit=1)
+                            if tax:
+                                taxes_ids.append(tax.id)
+
                     self.env['purchase.order.line'].create({
                         'order_id': current_po.id,
                         'product_id': product.id,
-                        'name': product.name,
+                        'name': description or product.name,
                         'product_qty': quantity,
                         'price_unit': price_unit,
                         'product_uom': product.uom_po_id.id,
-                        'date_planned': datetime.now(),
+                        'date_planned': scheduled_date or datetime.now(),
+                        'taxes_id': [(6, 0, taxes_ids)]
                     })
 
-                    if status == 'Purchase Order' and current_po:
-                        template = self.env.ref('purchase.email_template_edi_purchase')
-                        if template:
-                            template.send_mail(current_po.id, force_send=True)
+                    if self.state == 'sent':
+                        current_po.write({'state': 'sent'})
 
                 except Exception as e:
                     return self._create_log_and_return_error(f'Error in row {index + 2}: {str(e)}')
 
             if current_po:
                 created_pos.append(current_po.id)
-                if current_po.state == 'purchase':
-                    template = self.env.ref('purchase.email_template_edi_purchase')
-                    if template:
-                        template.send_mail(current_po.id, force_send=True)
+
+            purchase_orders = self.env['purchase.order'].browse(created_pos)
+            if self.state == 'sent':
+                purchase_orders.with_context(mail_notrack=True).write({'state': 'sent'})
+                template = self.env.ref('purchase.email_template_edi_purchase')
+                if template:
+                    for po in purchase_orders:
+                        template.send_mail(po.id, force_send=False)
+            elif self.state == 'purchase':
+                purchase_orders.with_context(mail_notrack=True).button_confirm()
+            elif self.state == 'cancel':
+                purchase_orders.with_context(mail_notrack=True).button_cancel()
 
             self.env['purchase.order.import.export.log'].create_log({
                 'name': 'Import Purchase Orders',
@@ -198,7 +220,7 @@ class PurchaseOrderOperations(models.TransientModel):
                 'tag': 'display_notification',
                 'params': {
                     'title': _('Success'),
-                    'message': _('%s purchase orders imported successfully.') % len(created_pos),
+                    'message': _(f'{len(created_pos)} purchase orders imported successfully.'),
                     'type': 'success',
                     'sticky': False,
                 }
@@ -206,50 +228,13 @@ class PurchaseOrderOperations(models.TransientModel):
 
         except Exception as e:
             return self._create_log_and_return_error(f'Error importing file: {str(e)}')
-
-    def _export_purchase_orders(self):
-        try:
-            purchase_orders = self.env['purchase.order'].search([])
-            data = []
-            
-            for po in purchase_orders:
-                for line in po.order_line:
-                    data.append({
-                        'Order Reference': po.name,
-                        'Vendor': po.partner_id.name,
-                        'Order Date': po.date_order.strftime('%Y-%m-%d'),
-                        'Product': line.product_id.name,
-                        'Quantity': line.product_qty,
-                        'Unit Price': line.price_unit,
-                        'Subtotal': line.price_subtotal
-                    })
-
-            df = pd.DataFrame(data)
-            excel_file = BytesIO()
-            df.to_excel(excel_file, index=False, engine='openpyxl')
-            
-            self.env['purchase.order.import.export.log'].create_log({
-                'name': 'Export Purchase Orders',
-                'operation_type': 'export',
-                'file_name': 'purchase_orders.xlsx',
-                'status': 'success',
-                'purchase_order_ids': [(6, 0, purchase_orders.ids)]
-            })
-
-            excel_file.seek(0)
-            export_data = base64.b64encode(excel_file.read())
-            
-            attachment = self.env['ir.attachment'].create({
-                'name': f'purchase_orders_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx',
-                'datas': export_data,
-                'type': 'binary'
-            })
-
-            return {
-                'type': 'ir.actions.act_url',
-                'url': f'/web/content/{attachment.id}?download=true',
-                'target': 'self',
-            }
-
-        except Exception as e:
-            return self._create_log_and_return_error(f'Error exporting file: {str(e)}')
+        
+    def action_view_logs(self):
+        return {
+            'name': 'Import/Export Logs',
+            'type': 'ir.actions.act_window',
+            'res_model': 'purchase.order.import.export.log',
+            'view_mode': 'list,form',
+            'domain': [('purchase_order_ids', 'in', self.id)],
+            'context': {'default_purchase_order_ids': [(6, 0, [self.id])]},
+        } 

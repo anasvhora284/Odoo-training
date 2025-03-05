@@ -18,3 +18,9 @@ location:
 10. On clicking import purchase order, the purchase order will be imported from the Excel file and the logs will be shown.
 11. On clicking export purchase order, the purchase order will be exported to the Excel file and the logs will be shown.
 12. On clicking show logs, the logs will be shown.
+
+
+Now here's the task to do:
+     1. Add a field near the Upload File button to select PO's state such as "Draft", "Sent", "Done", "Cancel".
+     2. if the PO's state is "Sent" then the email should be sent to the customer.
+     3. Currently it takes some time to send the email to the customer & import the PO which should be instant you can send emails in the background.
