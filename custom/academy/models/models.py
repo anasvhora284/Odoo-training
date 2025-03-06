@@ -11,6 +11,8 @@ class Teachers(models.Model):
     course_ids = fields.One2many('product.template', 'teacher_id', string="Courses")
 
 class Courses(models.Model):
+    _name = 'academy.courses'
+    _description = 'Courses'
     _inherit = 'product.template'
 
     teacher_id = fields.Many2one('academy.teachers', string="Teacher")

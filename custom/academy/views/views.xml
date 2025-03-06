@@ -32,21 +32,21 @@
     </field>
   </record>
 
-  <!-- Courses Views (extending product.template) -->
+  <!-- Courses Views (extending academy.courses) -->
   <record id="academy_course_form" model="ir.ui.view">
     <field name="name">Academy courses: form</field>
-    <field name="model">product.template</field>
-    <field name="inherit_id" ref="product.product_template_form_view" />
+    <field name="model">academy.courses</field>
+    <!-- <field name="inherit_id" ref="product.product_template_form_view" /> -->
     <field name="arch" type="xml">
-      <field name="name" position="after">
-        <field name="teacher_id" />
+      <field name="name">
       </field>
+      <field name="teacher_id" />
     </field>
   </record>
 
   <record id="academy_course_list" model="ir.ui.view">
     <field name="name">Academy courses: list</field>
-    <field name="model">product.template</field>
+    <field name="model">academy.courses</field>
     <field name="arch" type="xml">
       <list>
         <field name="name" />
@@ -56,25 +56,12 @@
     </field>
   </record>
 
-  <record id="academy_course_search" model="ir.ui.view">
-    <field name="name">Academy courses: search</field>
-    <field name="model">product.template</field>
-    <field name="inherit_id" ref="product.product_template_search_view" />
-    <field name="arch" type="xml">
-      <field name="name" position="after">
-        <field name="teacher_id" />
-      </field>
-    </field>
-  </record>
-
   <!-- Course Action -->
   <record id="action_academy_courses" model="ir.actions.act_window">
     <field name="name">Academy Courses</field>
-    <field name="res_model">product.template</field>
+    <field name="res_model">academy.courses</field>
     <field name="view_mode">list,form</field>
-    <field name="domain">[('teacher_id', '!=', False)]</field>
-    <field name="context">{'default_type': 'service', 'default_detailed_type': 'service'}</field>
-  </record>
+    </record>
 
   <!-- Menu Items -->
   <menuitem id="menu_academy" name="Academy" sequence="0" />
