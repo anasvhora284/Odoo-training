@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record model="product.public.category" id="category_courses">
+        <field name="name">Courses</field>
+        <field name="parent_id" ref="website_sale.categ_others" />
+    </record>
+</odoo>
