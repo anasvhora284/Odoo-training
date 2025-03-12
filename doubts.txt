@@ -2,3 +2,8 @@ should i use .inherit_{details} suffix or not? (As per new it suggest not to use
 
 company wise estate data!
 user wise estate data!
+
+
+1. add a cutom web builder snnippet
+2. show alert on event handling functions (drag & drop, select, delete)
+3. show alert on slecting a custom component & show its respected styles in customise

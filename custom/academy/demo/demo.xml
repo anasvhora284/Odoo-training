@@ -23,7 +23,6 @@
     <field name="is_published">True</field>
     <field name="list_price">0</field>
     <field name="type">service</field>
-    <field name="detailed_type">service</field>
     <field name="public_categ_ids" eval="[(6, 0, [ref('category_courses')])]" />
   </record>
 
@@ -33,7 +32,6 @@
     <field name="is_published">True</field>
     <field name="list_price">0</field>
     <field name="type">service</field>
-    <field name="detailed_type">service</field>
     <field name="public_categ_ids" eval="[(6, 0, [ref('category_courses')])]" />
   </record>
 
@@ -43,7 +41,6 @@
     <field name="is_published">True</field>
     <field name="list_price">0</field>
     <field name="type">service</field>
-    <field name="detailed_type">service</field>
     <field name="public_categ_ids" eval="[(6, 0, [ref('category_courses')])]" />
   </record>
 </odoo>

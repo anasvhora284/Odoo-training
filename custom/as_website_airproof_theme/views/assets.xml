@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <template id="website_airproof_assets_frontend" inherit_id="web.assets_frontend_lazy" name="Airproof Theme Assets">
-        <xpath expr="." position="inside">
-            <link rel="stylesheet" type="text/scss" href="/website_airproof_theme/static/src/scss/primary_variables.scss" />
-        </xpath>
-    </template>
-</odoo>

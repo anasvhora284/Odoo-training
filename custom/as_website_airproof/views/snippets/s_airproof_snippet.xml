@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Snippet Template -->
+    <template id="s_airproof_snippet" name="Airproof Features">
+        <section class="s_airproof_snippet pt32 pb32" data-snippet="s_airproof_snippet">
+            <div class="container">
+                <div class="row">
+                    <!-- Feature Box 1 -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="feature-box text-center">
+                            <i class="fa fa-cloud" />
+                            <h3>Cloud Solutions</h3>
+                            <p>Secure and scalable cloud infrastructure for your business needs.</p>
+                        </div>
+                    </div>
+                    <!-- Feature Box 2 -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="feature-box text-center">
+                            <i class="fa fa-lock" />
+                            <h3>Security First</h3>
+                            <p>Advanced security measures to protect your valuable data.</p>
+                        </div>
+                    </div>
+                    <!-- Feature Box 3 -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="feature-box text-center">
+                            <i class="fa fa-gear" />
+                            <h3>Easy Management</h3>
+                            <p>Intuitive tools for seamless system administration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Snippet Options -->
+    <template id="options" inherit_id="website.snippet_options">
+        <xpath expr="." position="inside">
+            <div data-js="AirproofSnippetOptions" data-selector=".s_airproof_snippet">
+                <!-- Style Options -->
+                <we-select string="Style" data-name="style_opt">
+                    <we-button data-select-class="style_1">Light</we-button>
+                    <we-button data-select-class="style_2">Gray</we-button>
+                    <we-button data-select-class="style_3">Dark</we-button>
+                </we-select>
+
+                <!-- Animation Options -->
+                <we-select string="Animation" data-name="animation_opt">
+                    <we-button data-select-class="fade-in">Fade In</we-button>
+                    <we-button data-select-class="slide-up">Slide Up</we-button>
+                </we-select>
+
+                <!-- Icon Options -->
+                <we-colorpicker string="Icon Color" data-select-style="true" data-css-property="color" data-selector="i.fa" />
+            </div>
+        </xpath>
+    </template>
+</odoo>

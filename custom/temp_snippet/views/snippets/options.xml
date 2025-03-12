@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="snippets" inherit_id="website.snippets" name="Custom Snippets">
+        <xpath expr="//t[@id='installed_snippets_hook']" position="after">
+            <t t-snippet="temp_snippet.s_airproof_snippet" t-thumbnail="" data-js="s_airproof_snippet_options" />
+        </xpath>
+    </template>
+</odoo>

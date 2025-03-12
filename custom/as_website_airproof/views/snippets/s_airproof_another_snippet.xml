@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="s_airproof_snippet_another" name="Airproof Features Options">
+        <section class="s_airproof_snippet_another pt32 pb32" data-snippet="s_airproof_snippet_another">
+            <div class="container main-class-selector">
+                <div class="row">
+                    <div class="col">
+                        <h1>Another Features</h1>
+                        <div class="btn-group mt-3 col gap-3">
+                            <div class="d-flex justify-content-between gap-3">
+                                <button class="btn btn-primary main_1">Click Me (Main 1)</button>
+                                <button class="btn btn-success as_test1">Test 1</button>
+                            </div>
+                            <div class="card mt-3 as_test2">
+                                <div class="card-body">
+                                    Hover over me (Test 2)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="as_website_airproof.CounterComponent">
+        <div class="counter-container text-center">
+            <h2>Counter: <t t-esc="state.count" />
+            </h2>
+            <button class="btn btn-success me-2" t-on-click="increment">Increment</button>
+            <button class="btn btn-danger" t-on-click="decrement">Decrement</button>
+        </div>
+    </t>
+</templates>

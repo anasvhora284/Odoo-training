@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="snippets" inherit_id="website.snippets" name="Custom Snippets">
+        <xpath expr="//t[@id='installed_snippets_hook']" position="after">
+            <t t-snippet="as_website_airproof.s_airproof_snippet" t-thumbnail="/as_website_airproof/static/src/img/wbuilder/s_airproof_snippet.jpeg" data-js="AirproofSnippetOptions" />
+            <t t-snippet="as_website_airproof.s_airproof_snippet_another" t-thumbnail="as_website_airproof/static/src/img/wbuilder/s_airproof_snippet.jpeg" data-js="AirproofSnippetWidget" />
+        </xpath>
+    </template>
+</odoo>
