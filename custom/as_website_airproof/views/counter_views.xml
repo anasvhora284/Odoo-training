@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Action -->
+        <record id="action_counter_app" model="ir.actions.client">
+            <field name="name">Counter App</field>
+            <field name="tag">as_website_airproof.CounterComponentCustom</field>
+        </record>
+
+        <!-- Parent Menu -->
+        <menuitem id="menu_airproof_root" name="Airproof" web_icon="as_website_airproof,static/description/icon.png" sequence="10" />
+
+        <!-- Counter Menu Item -->
+        <menuitem id="menu_counter_root" name="Counter App" parent="menu_airproof_root" action="action_counter_app" sequence="10" />
+    </data>
+</odoo> 

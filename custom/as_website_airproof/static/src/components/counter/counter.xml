@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="as_website_airproof.counter_action">
+        <div class="p-4 text-center">
+            <h1>Counter App</h1>
+            <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                <button class="btn btn-primary" t-on-click="decrement">-</button>
+                <span class="h3 mb-0">
+                    <t t-esc="state.count" />
+                </span>
+                <button class="btn btn-primary" t-on-click="increment">+</button>
+            </div>
+        </div>
+    </t>
+</templates> 

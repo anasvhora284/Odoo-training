@@ -1,51 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <data>
+        <record id="menu_counter" model="website.menu">
+            <field name="name">Counter</field>
+            <field name="url">/counter</field>
+            <field name="website_id">1</field>
+            <field name="parent_id" search="[
+            ('url', '=', '/default-main-menu'),
+            ('website_id', '=', 1)]" />
+            <field name="sequence" type="int">31</field>
+        </record>
 
-    <record id="menu_counter" model="website.menu">
-        <field name="name">Counter</field>
-        <field name="url">/counter</field>
-        <field name="parent_id" ref="website.menu_contactus" />
-    </record>
+        <record id="menu_services" model="website.menu">
+            <field name="name">Services</field>
+            <field name="website_id">1</field>
+            <field name="parent_id" search="[
+            ('url', '=', '/default-main-menu'),
+            ('website_id', '=', 1)]" />
+            <field name="sequence" type="int">10</field>
+        </record>
 
-    <record id="menu_services" model="website.menu">
-        <field name="name">Services</field>
-        <field name="website_id">1</field>
-        <field name="parent_id" search="[
-        ('url', '=', '/default-main-menu'),
-        ('website_id', '=', 1)]" />
-        <field name="sequence" type="int">10</field>
-    </record>
+        <record id="menu_services_item_1" model="website.menu">
+            <field name="name">Item 1</field>
+            <field name="url">/dropdown/item-1</field>
+            <field name="website_id">1</field>
+            <field name="parent_id" ref="as_website_airproof.menu_services" />
+            <field name="sequence" type="int">10</field>
+        </record>
 
-    <record id="menu_services_item_1" model="website.menu">
-        <field name="name">Item 1</field>
-        <field name="url">/dropdown/item-1</field>
-        <field name="website_id">1</field>
-        <field name="parent_id" ref="as_website_airproof.menu_services" />
-        <field name="sequence" type="int">10</field>
-    </record>
-
-    <record id="menu_mega_menu" model="website.menu">
-        <field name="name">Mega Menu</field>
-        <field name="url">/mega-menu</field>
-        <field name="parent_id" search="[
-        ('url', '=', '/default-main-menu'),
-        ('website_id', '=', 1)]" />
-        <field name="website_id">1</field>
-        <field name="sequence" type="int">20</field>
-        <field name="is_mega_menu" eval="True" />
-        <field name="mega_menu_classes">mega-menu-class</field>
-        <field name="mega_menu_content" type="html">
-            <ul>
-                <li>
-                    <a href="/link1">Link 1</a>
-                </li>
-                <li>
-                    <a href="/link2">Link 2</a>
-                </li>
-                <li>
-                    <a href="/link3">Link 3</a>
-                </li>
-            </ul>
-        </field>
-    </record>
+        <record id="menu_mega_menu" model="website.menu">
+            <field name="name">Mega Menu</field>
+            <field name="url">/mega-menu</field>
+            <field name="parent_id" search="[
+            ('url', '=', '/default-main-menu'),
+            ('website_id', '=', 1)]" />
+            <field name="website_id">1</field>
+            <field name="sequence" type="int">20</field>
+            <field name="is_mega_menu" eval="True" />
+            <field name="mega_menu_classes">mega-menu-class</field>
+            <field name="mega_menu_content" type="html">
+                <ul>
+                    <li>
+                        <a href="/link1">Link 1</a>
+                    </li>
+                    <li>
+                        <a href="/link2">Link 2</a>
+                    </li>
+                    <li>
+                        <a href="/link3">Link 3</a>
+                    </li>
+                </ul>
+            </field>
+        </record>
+    </data>
 </odoo>

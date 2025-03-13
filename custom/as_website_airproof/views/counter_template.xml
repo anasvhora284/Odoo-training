@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="counter_template" name="Counter Page">
+        <t t-call="website.layout">
+            <div id="counter-app" class="container mt-5">
+                <h2>Custom Counter</h2>
+                <owl-component name="as_website_airproof.CounterComponentCustom" />
+            </div>
+        </t>
+    </template>
+</odoo>

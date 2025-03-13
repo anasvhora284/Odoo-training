@@ -18,32 +18,4 @@
             <we-button t-att-data-select-label="_label" data-select-template="website_website_airproof.s_mega_menu_airproof" data-img="/website_airproof/static/src/img/builder/header_opt.svg" t-out="_label" />
         </xpath>
     </template>
-
-    <!-- Counter Page Template -->
-    <template id="counter_page_template" name="Counter Page">
-        <t t-call="website.layout">
-            <div id="wrap">
-                <section class="pt32 pb32">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-6">
-                                <h1 class="text-center mb-4">Counter Demo Page</h1>
-                                <div class="o_website_component" data-component-name="CounterComponent" />
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </t>
-    </template>
-
-    <!-- Route Controller -->
-    <record id="counter_page_controller" model="ir.ui.view">
-        <field name="name">Counter Page Controller</field>
-        <field name="type">qweb</field>
-        <field name="key">website.counter_page</field>
-        <field name="arch" type="xml">
-            <t t-call="as_website_airproof.counter_page_template" />
-        </field>
-    </record>
 </odoo>
