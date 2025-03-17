@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="as_website_airproof.calculator_component">
+        <div class="p-4 text-center">
+            <h1>Calculator Service</h1>
+            <div class="calculator mx-auto my-4" style="max-width: 300px;">
+                <div class="display p-3 mb-3 text-end bg-light border rounded">
+                    <h3 t-out="state.display" />
+                </div>
+                <div class="buttons">
+                    <div class="row g-2 mb-2">
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="7">7</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="8">8</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="9">9</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-primary w-100" t-on-click="handleOperator" data-val="/">/</button>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="4">4</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="5">5</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="6">6</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-primary w-100" t-on-click="handleOperator" data-val="*">*</button>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="1">1</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="2">2</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="3">3</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-primary w-100" t-on-click="handleOperator" data-val="-">-</button>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDigit" data-val="0">0</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-secondary w-100" t-on-click="inputDecimal">.</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-success w-100" t-on-click="handleOperator" data-val="=">=</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-primary w-100" t-on-click="handleOperator" data-val="+">+</button>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button class="btn btn-danger w-100" t-on-click="resetCalculator">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates> 

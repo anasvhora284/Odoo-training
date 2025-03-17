@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="as_website_airproof.rainbow_menu_button">
+        <div class="o_rainbow_button">
+            <button class="btn btn-primary" t-on-click="showRainbowMan">
+                <i class="fa fa-magic me-1"></i> Rainbow Man
+            </button>
+        </div>
+    </t>
+</templates> 

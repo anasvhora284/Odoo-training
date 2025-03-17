@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="as_website_airproof.rainbow_component">
+        <div class="p-4 text-center">
+            <h1>Rainbow Man Effect</h1>
+
+            <div class="card my-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Message Options</h5>
+
+                    <div class="mb-3">
+                        <label for="customMessage" class="form-label">Custom Message</label>
+                        <input type="text" class="form-control" id="customMessage" placeholder="Enter your custom message" t-model="state.activeMessage"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fadeout Speed</label>
+                        <div class="btn-group w-100" role="group">
+                            <t t-foreach="state.fadeoutOptions" t-as="fadeout" t-key="fadeout">
+                                <button type="button" t-attf-class="btn {{ state.selectedFadeout === fadeout ? 'btn-primary' : 'btn-outline-primary' }}" t-on-click="setFadeout(fadeout)">
+                                    <t t-esc="fadeout"/>
+                                </button>
+                            </t>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="htmlMessage" t-att-checked="state.messageIsHtml" t-on-change="toggleHtml"/>
+                        <label class="form-check-label" for="htmlMessage">
+                            Message is HTML
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3 my-4">
+                <button class="btn btn-primary btn-lg" t-on-click="showRainbowMan">
+                    <i class="fa fa-magic me-2"></i> Show Random Rainbow Man
+                </button>
+                <button class="btn btn-success btn-lg" t-on-click="showCustomMessage">
+                    <i class="fa fa-comment me-2"></i> Show Custom Message
+                </button>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <h5>
+                    <i class="fa fa-info-circle me-2"></i> About Rainbow Man</h5>
+                <p>The Rainbow Man is Odoo's celebration effect that appears when something great happens!</p>
+                <p>It's commonly used to celebrate achievements, completed tasks, or milestones.</p>
+            </div>
+        </div>
+    </t>
+</templates> 

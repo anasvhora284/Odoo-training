@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="notification_template" name="Notification Page">
+        <t t-call="website.layout">
+            <div id="notification-app" class="container mt-5">
+                <h2>Notification Service</h2>
+                <owl-component name="as_website_airproof.NotificationComponent" />
+            </div>
+        </t>
+    </template>
+
+    <template id="rainbow_template" name="Rainbow Page">
+        <t t-call="website.layout">
+            <div id="rainbow-app" class="container mt-5">
+                <h2>Rainbow Service</h2>
+                <owl-component name="as_website_airproof.RainbowComponent" />
+            </div>
+        </t>
+    </template>
+
+    <template id="calculator_template" name="Calculator Page">
+        <t t-call="website.layout">
+            <div id="calculator-app" class="container mt-5">
+                <h2>Calculator Service</h2>
+                <owl-component name="as_website_airproof.CalculatorComponent" />
+            </div>
+        </t>
+    </template>
+</odoo> 

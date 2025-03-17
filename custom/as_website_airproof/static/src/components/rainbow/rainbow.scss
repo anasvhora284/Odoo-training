@@ -1,0 +1,91 @@
+.o_rainbow_button {
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  &.rainbow-menu-item {
+    border-radius: 4px;
+    margin: 0 5px;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  button {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.rainbow-message {
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  animation: bounce 1s infinite alternate;
+  letter-spacing: 1px;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+/* Rainbow text animation */
+.rainbow-box {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(
+      to right,
+      red,
+      orange,
+      yellow,
+      green,
+      blue,
+      indigo,
+      violet
+    );
+    animation: rainbow-border 2s linear infinite;
+  }
+}
+
+@keyframes rainbow-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+// Custom styling for the rainbow component
+.btn-group .btn {
+  transition: all 0.2s ease;
+}
+
+// Add some animation to the buttons
+.btn-primary,
+.btn-success {
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}

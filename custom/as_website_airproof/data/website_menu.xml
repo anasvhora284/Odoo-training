@@ -20,12 +20,28 @@
             <field name="sequence" type="int">10</field>
         </record>
 
-        <record id="menu_services_item_1" model="website.menu">
-            <field name="name">Item 1</field>
-            <field name="url">/dropdown/item-1</field>
+        <record id="menu_notification" model="website.menu">
+            <field name="name">Notification</field>
+            <field name="url">/notification</field>
             <field name="website_id">1</field>
             <field name="parent_id" ref="as_website_airproof.menu_services" />
             <field name="sequence" type="int">10</field>
+        </record>
+
+        <record id="menu_rainbow" model="website.menu">
+            <field name="name">Rainbow</field>
+            <field name="url">/rainbow</field>
+            <field name="website_id">1</field>
+            <field name="parent_id" ref="as_website_airproof.menu_services" />
+            <field name="sequence" type="int">20</field>
+        </record>
+
+        <record id="menu_calculator" model="website.menu">
+            <field name="name">Calculator</field>
+            <field name="url">/calculator</field>
+            <field name="website_id">1</field>
+            <field name="parent_id" ref="as_website_airproof.menu_services" />
+            <field name="sequence" type="int">30</field>
         </record>
 
         <record id="menu_mega_menu" model="website.menu">

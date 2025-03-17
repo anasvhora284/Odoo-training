@@ -5,7 +5,7 @@
             <t t-foreach="menu_items" t-as="item">
                 <div class="menu-item">
                     <a t-att-href="item.url">
-                        <t t-esc="item.name" />
+                        <t t-out="item.name" />
                     </a>
                 </div>
             </t>

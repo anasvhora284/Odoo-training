@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-        <!-- Action -->
+        <!-- Actions -->
         <record id="action_counter_app" model="ir.actions.client">
             <field name="name">Counter App</field>
             <field name="tag">as_website_airproof.CounterComponentCustom</field>
+        </record>
+
+        <record id="action_notification_app" model="ir.actions.client">
+            <field name="name">Notification Service</field>
+            <field name="tag">as_website_airproof.notification_action</field>
+        </record>
+
+        <record id="action_rainbow_app" model="ir.actions.client">
+            <field name="name">Rainbow Service</field>
+            <field name="tag">as_website_airproof.rainbow_action</field>
+        </record>
+
+        <record id="action_calculator_app" model="ir.actions.client">
+            <field name="name">Calculator Service</field>
+            <field name="tag">as_website_airproof.calculator_action</field>
         </record>
 
         <!-- Parent Menu -->
@@ -12,5 +27,13 @@
 
         <!-- Counter Menu Item -->
         <menuitem id="menu_counter_root" name="Counter App" parent="menu_airproof_root" action="action_counter_app" sequence="10" />
+
+        <!-- Services Menu -->
+        <menuitem id="menu_services_root" name="Services" parent="menu_airproof_root" sequence="20" />
+
+        <!-- Service Submenu Items -->
+        <menuitem id="menu_notification_service" name="Notification" parent="menu_services_root" action="action_notification_app" sequence="10" />
+        <menuitem id="menu_rainbow_service" name="Rainbow" parent="menu_services_root" action="action_rainbow_app" sequence="20" />
+        <menuitem id="menu_calculator_service" name="Calculator" parent="menu_services_root" action="action_calculator_app" sequence="30" />
     </data>
 </odoo> 

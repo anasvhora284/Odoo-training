@@ -6,7 +6,7 @@
             <div class="d-flex justify-content-center align-items-center gap-3 my-4">
                 <button class="btn btn-primary" t-on-click="decrement">-</button>
                 <span class="h3 mb-0">
-                    <t t-esc="state.count" />
+                    <t t-out="state.count" />
                 </span>
                 <button class="btn btn-primary" t-on-click="increment">+</button>
             </div>
