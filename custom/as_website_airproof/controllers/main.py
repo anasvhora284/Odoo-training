@@ -18,3 +18,7 @@ class CounterController(http.Controller):
     @http.route('/calculator', type='http', auth='public', website=True)
     def calculator_page(self, **kw):
         return request.render('as_website_airproof.calculator_template', {})
+        
+    @http.route('/js-rpc-demo', type='http', auth='public', website=True)
+    def js_rpc_demo_page(self, **kw):
+        return request.render('as_website_airproof.rpc_js_demo_template', {})

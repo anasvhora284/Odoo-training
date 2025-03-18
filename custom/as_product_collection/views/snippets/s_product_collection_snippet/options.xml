@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="snippets" inherit_id="website.snippets" name="Custom Snippets">
+        <xpath expr="//t[@id='installed_snippets_hook']" position="after">
+            <t t-snippet="as_product_collection.s_product_collection_snippet" t-thumbnail="as_product_collection/static/description/icon.png" data-js="SelectCollection" data-selector=".s_product_collection_snippet" />
+        </xpath>
+    </template>
+
+    <template id="snippet_options" inherit_id="website.snippet_options" name="Product Collection Options">
+        <xpath expr="." position="inside">
+            <div data-js="SelectCollection" data-selector=".s_product_collection_snippet" data-no-check="true">
+            </div>
+        </xpath>
+    </template>
+</odoo>

@@ -45,11 +45,19 @@
         </record>
 
         <record id="menu_rpc_test" model="website.menu">
-            <field name="name">RPC Test</field>
-            <field name="url">/airproof/rpc/test</field>
+            <field name="name">Simple RPC Test</field>
+            <field name="url">/simple_rpc/test</field>
             <field name="website_id">1</field>
             <field name="parent_id" ref="as_website_airproof.menu_services" />
             <field name="sequence" type="int">40</field>
+        </record>
+
+        <record id="menu_js_rpc_demo" model="website.menu">
+            <field name="name">JS RPC Demo</field>
+            <field name="url">/js-rpc-demo</field>
+            <field name="website_id">1</field>
+            <field name="parent_id" ref="as_website_airproof.menu_services" />
+            <field name="sequence" type="int">50</field>
         </record>
 
         <record id="menu_mega_menu" model="website.menu">

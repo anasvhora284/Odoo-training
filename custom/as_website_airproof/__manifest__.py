@@ -16,6 +16,7 @@
         'base',
         'website',
         'web_editor',
+        'website_sale',
     ],
 
     'data': [
@@ -23,8 +24,8 @@
         'views/counter_views.xml',
         'views/counter_template.xml',
         'views/service_templates.xml',
-        'views/rpc_log_views.xml',
-        'views/rpc_test_template.xml',
+        'views/simple_rpc_test_template.xml',
+        'views/rpc_demo_template.xml',
         'data/presets.xml',
         'views/website_templates.xml',
         'data/website_menu.xml',
@@ -46,6 +47,8 @@
             '/as_website_airproof/static/src/components/rainbow/rainbow_menu_button.xml',
             '/as_website_airproof/static/src/components/calculator/calculator.js',
             '/as_website_airproof/static/src/components/calculator/calculator.xml',
+            '/as_website_airproof/static/src/components/rpc_demo/rpc_demo.js',
+            '/as_website_airproof/static/src/components/rpc_demo/rpc_demo.xml',
         ],
         'web.assets_frontend': [
             '/as_website_airproof/static/src/components/counter/counter.js',
@@ -58,6 +61,8 @@
             '/as_website_airproof/static/src/components/rainbow/rainbow_menu_button.xml',
             '/as_website_airproof/static/src/components/calculator/calculator.js',
             '/as_website_airproof/static/src/components/calculator/calculator.xml',
+            '/as_website_airproof/static/src/components/rpc_demo/rpc_demo.js',
+            '/as_website_airproof/static/src/components/rpc_demo/rpc_demo.xml',
             '/as_website_airproof/static/src/snippets/s_airproof_snippet/000.js',
         ],
         'website.assets_wysiwyg': [

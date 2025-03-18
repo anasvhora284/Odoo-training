@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="s_product_collection_snippet" name="Product Collection">
+        <section class="s_product_collection_snippet pt32 pb32" data-snippet="s_product_collection_snippet">
+            <div class="container">
+                <p class="hello-world">Hello World</p>
+            </div>
+        </section>
+    </template>
+</odoo>

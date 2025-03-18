@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="as_website_airproof.rpc_demo_component">
+        <div class="rpc-demo-component p-4">
+            <div class="container">
+                <h1 class="text-center mb-4">JavaScript RPC Demo in Odoo 18</h1>
+
+                <!-- Products Section -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Products</h5>
+                        <button class="btn btn-primary btn-sm" t-on-click="fetchProducts" t-att-disabled="state.isLoading.products">
+                            <i t-if="state.isLoading.products" class="fa fa-spinner fa-spin me-1"></i>
+                            Refresh Products
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div t-if="state.isLoading.products" class="text-center p-3">
+                            <i class="fa fa-spinner fa-spin me-2"></i> Loading products...
+                        </div>
+                        <div t-elif="state.products.length === 0" class="alert alert-info">
+                            No products found. Click the refresh button to load products.
+                        </div>
+                        <div t-else>
+<h6>Products loaded via RPC:</h6>
+<div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.products" t-as="product" t-key="product.id">
+                                        <td>
+                                            <t t-esc="product.id"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="product.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="product.price"/>
+ €</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Items Section -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Menu Items</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="menuType" class="form-label">Menu Type</label>
+                            <select id="menuType" class="form-select" t-on-change="onMenuTypeChange">
+                                <option value="both" selected="">Both</option>
+                                <option value="backend">Backend Only</option>
+                                <option value="frontend">Frontend Only</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <button class="btn btn-primary me-2" t-on-click="fetchMenuItems" t-att-disabled="state.isLoading.menus">
+                                <i t-if="state.isLoading.menus" class="fa fa-spinner fa-spin me-1"></i>
+                                    Load Menus
+                            </button>
+                            <button class="btn btn-outline-secondary" t-on-click="fetchMenuItemsAlternative" t-att-disabled="state.isLoading.menus">
+                                    Alternative RPC
+                            </button>
+                        </div>
+                    </div>
+
+                    <div t-if="state.isLoading.menus" class="text-center p-3">
+                        <i class="fa fa-spinner fa-spin me-2"></i> Loading menu items...
+                    </div>
+                    <div t-elif="state.menuItems.backend.length === 0 &amp;&amp; state.menuItems.frontend.length === 0" class="alert alert-info">
+                            No menu items loaded. Select a menu type and click "Load Menus".
+                    </div>
+                    <div t-else class="row">
+                        <!-- Backend Menus -->
+                        <div t-if="state.menuItems.backend.length > 0" class="col-md-6 mb-3">
+                            <h6>Backend Menus:</h6>
+                            <ul class="list-group">
+                                <li t-foreach="state.menuItems.backend" t-as="menu" t-key="menu.id" class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <t t-esc="menu.name"/>
+                                    </span>
+                                    <span class="badge bg-primary rounded-pill">ID: <t t-esc="menu.id"/>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Frontend Menus -->
+                        <div t-if="state.menuItems.frontend.length > 0" class="col-md-6 mb-3">
+                            <h6>Frontend Menus:</h6>
+                            <ul class="list-group">
+                                <li t-foreach="state.menuItems.frontend" t-as="menu" t-key="menu.id" class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <t t-esc="menu.name"/>
+                                    </span>
+                                    <small class="text-muted">
+                                        <t t-esc="menu.url"/>
+                                    </small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RPC Information Section -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">JavaScript RPC Examples</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6>
+                            <i class="fa fa-info-circle me-2"></i>About Odoo JavaScript RPC</h6>
+                        <p class="mb-0">
+                                This component demonstrates different ways to make RPC calls in Odoo 18.0 using JavaScript:
+                        </p>
+                        <ol class="mt-2 mb-0">
+                            <li>Direct controller endpoint calls via <code>this.rpc(route, params)</code>
+                            </li>
+                            <li>Model method calls via <code>this.rpc("/web/dataset/call_kw/...")</code>
+                            </li>
+                            <li>Handling loading states and errors</li>
+                            <li>Using notification service to show results</li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-3">
+                        <h6>Common RPC Patterns:</h6>
+                        <pre class="bg-light p-3 rounded">
+                            <code>// Direct controller call
+const result = await this.rpc("/my/endpoint", { param1: "value" });
+
+// Model method call
+const result = await this.rpc(
+    "/web/dataset/call_kw/model.name/method_name",
+    {
+        model: "model.name",
+        method: "method_name",
+        args: [],
+        kwargs: { param1: "value" }
+    }
+);
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+</templates> 

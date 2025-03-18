@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Web Controller Template -->
+    <template id="rpc_js_demo_template" name="JavaScript RPC Demo">
+        <t t-call="website.layout">
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center mb-4">JavaScript RPC in Odoo 18.0</h1>
+
+                        <!-- OWL Component will be rendered here -->
+                        <owl-component name="as_website_airproof.RPCDemoComponent" />
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo> 

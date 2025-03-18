@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Create a test collection -->
+        <record id="demo_product_collection_1" model="website.product.collection">
+            <field name="name">Demo Collection 1</field>
+            <field name="product_ids" eval="[(6, 0, [ref('product.product_product_1'), ref('product.product_product_2')])]"/>
+        </record>
+    </data>
+</odoo> 

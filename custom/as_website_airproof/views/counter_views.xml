@@ -22,6 +22,11 @@
             <field name="tag">as_website_airproof.calculator_action</field>
         </record>
 
+        <record id="action_rpc_demo_app" model="ir.actions.client">
+            <field name="name">JavaScript RPC Demo</field>
+            <field name="tag">as_website_airproof.rpc_demo_action</field>
+        </record>
+
         <!-- Parent Menu -->
         <menuitem id="menu_airproof_root" name="Airproof" web_icon="as_website_airproof,static/description/icon.png" sequence="10" />
 
@@ -35,5 +40,6 @@
         <menuitem id="menu_notification_service" name="Notification" parent="menu_services_root" action="action_notification_app" sequence="10" />
         <menuitem id="menu_rainbow_service" name="Rainbow" parent="menu_services_root" action="action_rainbow_app" sequence="20" />
         <menuitem id="menu_calculator_service" name="Calculator" parent="menu_services_root" action="action_calculator_app" sequence="30" />
+        <menuitem id="menu_rpc_demo_service" name="JS RPC Demo" parent="menu_services_root" action="action_rpc_demo_app" sequence="40" />
     </data>
 </odoo> 

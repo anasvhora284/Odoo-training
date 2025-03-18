@@ -1,3 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_rpc_log_admin,rpc.log.admin,model_as_website_airproof_rpc_log,base.group_system,1,1,1,1
-access_rpc_log_user,rpc.log.user,model_as_website_airproof_rpc_log,base.group_user,1,0,0,0
+access_rpc_demo_admin,rpc.demo.admin,model_as_website_airproof_rpc_demo,base.group_system,1,1,1,1
+access_rpc_demo_public,rpc.demo.public,model_as_website_airproof_rpc_demo,,1,0,0,0

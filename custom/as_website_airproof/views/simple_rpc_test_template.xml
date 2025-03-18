@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="simple_rpc_test_template" name="Simple RPC Test Page">
+        <t t-call="website.layout">
+            <div id="simple-rpc-test" class="container my-5">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="mb-4">Simple Odoo RPC Test</h1>
+                        <p class="lead">
+                            This page demonstrates simple RPC functionality in Odoo 18.0 to get product lists.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="card-title mb-0">XML-RPC Example</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Simple XML-RPC to get product list:
+                                </p>
+                                <pre class="bg-light p-3 rounded">
+                                    <code>
+import xmlrpc.client
+
+# Connection parameters
+url = 'http://localhost:8069'
+DB = 'theme_try'
+username = 'admin'
+password = 'admin'
+
+# Authentication
+common = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/common')
+uid = common.authenticate(db, username, password, {})
+
+# Call method to get products
+models = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/object')
+products = models.execute_kw(
+    db, uid, password,
+    'as_website_airproof.rpc_demo', 
+    'get_product_list', 
+    [[10]]  # Limit to 10 products
+)
+
+print(products)
+                                    </code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h3 class="card-title mb-0">JSON-RPC Example</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Simple JSON-RPC to get product list:
+                                </p>
+                                <pre class="bg-light p-3 rounded">
+                                    <code>
+import requests
+import json
+
+# Connection parameters
+url = 'http://localhost:8069'
+DB = 'theme_try'
+username = 'admin'
+password = 'admin'
+
+# Authentication
+auth_url = f'{url}/web/session/authenticate'
+auth_data = {
+    'jsonrpc': '2.0',
+    'params': {
+        'db': db,
+        'login': username,
+        'password': password
+    }
+}
+session = requests.Session()
+response = session.post(
+    auth_url, data=json.dumps(auth_data), headers={'Content-Type': 'application/json'}
+)
+
+# Get products
+rpc_url = f'{url}/simple_rpc/products'
+data = {
+    'jsonrpc': '2.0',
+    'method': 'call',
+    'params': {
+        'limit': 10
+    },
+    'id': 1
+}
+response = session.post(
+    rpc_url, data=json.dumps(data), headers={'Content-Type': 'application/json'}
+)
+
+print(response.json())
+                                    </code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-header bg-warning text-white">
+                                <h3 class="card-title mb-0">Menu Items Example</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    Simple example to get menu items:
+                                </p>
+                                <pre class="bg-light p-3 rounded">
+                                    <code>
+                                        # XML-RPC Example
+                                        import xmlrpc.client
+
+                                        # Connection parameters
+                                        url = 'http://localhost:8069'
+                                        db = 'theme_try'
+                                        username = 'admin'
+                                        password = 'admin'
+
+                                        # Authentication
+                                        common = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/common')
+                                        uid = common.authenticate(db, username, password, {})
+
+                                        # Call method to get menu items
+                                        models = xmlrpc.client.ServerProxy(f'{url}/xmlrpc/2/object')
+                                        menus = models.execute_kw(
+                                            db, uid, password,
+                                            'as_website_airproof.rpc_demo', 
+                                            'get_menu_items', 
+                                            [['both']]  # Get both backend and frontend menus
+                                        )
+
+                                        print(menus)
+
+                                        # JSON-RPC Example
+                                        import requests
+                                        import json
+
+                                        # Get menu items using direct endpoint
+                                        rpc_url = f'{url}/simple_rpc/menus'
+                                        data = {
+                                            'jsonrpc': '2.0',
+                                            'method': 'call',
+                                            'params': {
+                                                'menu_type': 'frontend'  # Get only frontend menus
+                                            },
+                                            'id': 2
+                                        }
+                                        response = session.post(
+                                            rpc_url, data=json.dumps(data), headers={'Content-Type': 'application/json'}
+                                        )
+
+                                        print(response.json())
+                                    </code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h3 class="card-title mb-0">Live Product List Demo</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="product_limit">Number of Products</label>
+                                            <input type="number" class="form-control" id="product_limit" value="5" min="1" max="50"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button id="get_products" class="btn btn-primary mt-4">Get Products</button>
+                                    </div>
+                                </div>
+                                <div class="product-results mt-3">
+                                    <h4>Products:</h4>
+                                    <div id="product_list" class="p-3 bg-light border rounded">
+                                        <p class="text-muted">Click the button to fetch products</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h3 class="card-title mb-0">Live Menu Items Demo</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="menu_type">Menu Type</label>
+                                            <select class="form-control" id="menu_type">
+                                                <option value="backend">Backend Menus</option>
+                                                <option value="frontend">Frontend Menus</option>
+                                                <option value="both">Both Types</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button id="get_menus" class="btn btn-success mt-4">Get Menu Items</button>
+                                    </div>
+                                </div>
+                                <div class="menu-results mt-3">
+                                    <h4>Menu Items:</h4>
+                                    <div id="menu_items" class="p-3 bg-light border rounded">
+                                        <p class="text-muted">Click the button to fetch menu items</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('get_products').addEventListener('click', function() {
+                        // Get limit value
+                        var limit = parseInt(document.getElementById('product_limit').value || 5);
+                        
+                        // Call the RPC endpoint using fetch API
+                        fetch('/simple_rpc/products', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                            body: JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'call',
+                                params: {
+                                    limit: limit
+                                },
+                                id: Math.floor(Math.random() * 1000000)
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            var productList = document.getElementById('product_list');
+                            productList.innerHTML = '';
+                            
+                            if (data.result &amp;&amp; data.result.success) {
+                                var products = data.result.products;
+                                
+                                if (products.length === 0) {
+                                    productList.innerHTML = '<p>No products found</p>';
+                                    return;
+                                }
+                                
+                                var table = document.createElement('table');
+                                table.className = 'table table-striped';
+                                
+                                // Create header
+                                var thead = document.createElement('thead');
+                                var headerRow = document.createElement('tr');
+                                ['Name', 'Code', 'Price'].forEach(function(text) {
+                                    var th = document.createElement('th');
+                                    th.textContent = text;
+                                    headerRow.appendChild(th);
+                                });
+                                thead.appendChild(headerRow);
+                                table.appendChild(thead);
+                                
+                                // Create body
+                                var tbody = document.createElement('tbody');
+                                products.forEach(function(product) {
+                                    var row = document.createElement('tr');
+                                    
+                                    var nameCell = document.createElement('td');
+                                    nameCell.textContent = product.name;
+                                    row.appendChild(nameCell);
+                                    
+                                    var codeCell = document.createElement('td');
+                                    codeCell.textContent = product.default_code || '-';
+                                    row.appendChild(codeCell);
+                                    
+                                    var priceCell = document.createElement('td');
+                                    priceCell.textContent = product.list_price.toFixed(2);
+                                    row.appendChild(priceCell);
+                                    
+                                    tbody.appendChild(row);
+                                });
+                                table.appendChild(tbody);
+                                productList.appendChild(table);
+                            } else if (data.result &amp;&amp; data.result.error) {
+                                productList.innerHTML = '<div class="alert alert-danger">Error: ' + data.result.error + '</div>';
+                            } else {
+                                productList.innerHTML = '<div class="alert alert-danger">Error: Unknown error</div>';
+                            }
+                        })
+                        .catch(error => {
+                            document.getElementById('product_list').innerHTML = 
+                                '                <div class="alert alert-danger">Error: ' + error.message + '</div>';
+                            console.error('Error:', error);
+                        });
+                    });
+
+                    document.getElementById('get_menus').addEventListener('click', function() {
+                        // Get menu type value
+                        var menuType = document.getElementById('menu_type').value;
+                        
+                        // Call the RPC endpoint using fetch API
+                        fetch('/simple_rpc/menus', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                            body: JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'call',
+                                params: {
+                                    menu_type: menuType
+                                },
+                                id: Math.floor(Math.random() * 1000000)
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            var menuList = document.getElementById('menu_items');
+                            menuList.innerHTML = '';
+                            
+                            if (data.result &amp;&amp; data.result.success) {
+                                var menuItems = data.result.menu_items;
+                                var output = '';
+                                
+                                if (menuType === 'backend' || menuType === 'both') {
+                                    output += '<h5>Backend Menus</h5>';
+                                    
+                                    // Display Airproof backend menus
+                                    output += '<h6>Airproof Module Menus:</h6>';
+                                    output += '<ul>';
+                                    menuItems.backend_menus.airproof_menus.forEach(function(menu) {
+                                        output += '<li>
+                <strong>' + menu.name + '</strong> - ID: ' + menu.id + '</li>';
+                                    });
+                                    output += '</ul>';
+                                    
+                                    // Display main menus
+                                    output += '<h6>Main Backend Menus:</h6>';
+                                    output += '<ul>';
+                                    menuItems.backend_menus.main_menus.forEach(function(menu) {
+                                        output += '<li>
+        <strong>' + menu.name + '</strong> - ID: ' + menu.id + '</li>';
+                                    });
+                                    output += '</ul>';
+                                }
+                                
+                                if (menuType === 'frontend' || menuType === 'both') {
+                                    output += '<h5>Frontend Website Menus</h5>';
+                                    
+                                    // Display Airproof frontend menus
+                                    output += '<h6>Airproof Module Menus:</h6>';
+                                    output += '<ul>';
+                                    menuItems.frontend_menus.airproof_menus.forEach(function(menu) {
+                                        output += '<li>
+<strong>' + menu.name + '</strong> - URL: ' + menu.url + '</li>';
+                                    });
+                                    output += '</ul>';
+                                    
+                                    // Display all website menus
+                                    output += '<h6>All Website Menus:</h6>';
+                                    output += '<ul>';
+                                    var displayCount = 0;
+                                    menuItems.frontend_menus.all_menus.forEach(function(menu) {
+                                        if (displayCount < 10) { // Limit display to avoid overwhelming
+                                            output += '<li><strong>' + menu.name + '</strong> - URL: ' + menu.url + '</li>';
+                                            displayCount++;
+                                        }
+                                    });
+                                    if (menuItems.frontend_menus.all_menus.length > 10) {
+                                        output += '<li>... and ' + (menuItems.frontend_menus.all_menus.length - 10) + ' more</li>';
+                                    }
+                                    output += '</ul>';
+                                }
+                                
+                                menuList.innerHTML = output;
+                            } else if (data.result &amp;&amp; data.result.error) {
+                                menuList.innerHTML = '<div class="alert alert-danger">Error: ' + data.result.error + '</div>';
+                            } else {
+                                menuList.innerHTML = '<div class="alert alert-danger">Error: Unknown error</div>';
+                            }
+                        })
+                        .catch(error => {
+                            document.getElementById('menu_items').innerHTML = 
+                                '<div class="alert alert-danger">Error: ' + error.message + '</div>';
+                            console.error('Error:', error);
+                        });
+                    });
+                });
+            </script>
+</t>
+</template>
+</odoo> 
