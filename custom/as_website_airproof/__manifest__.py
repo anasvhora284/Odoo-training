@@ -19,9 +19,12 @@
     ],
 
     'data': [
+        'security/ir.model.access.csv',
         'views/counter_views.xml',
         'views/counter_template.xml',
         'views/service_templates.xml',
+        'views/rpc_log_views.xml',
+        'views/rpc_test_template.xml',
         'data/presets.xml',
         'views/website_templates.xml',
         'data/website_menu.xml',
