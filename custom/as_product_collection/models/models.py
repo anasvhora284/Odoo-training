@@ -29,14 +29,7 @@ class ProductCollection(models.Model):
                 'id': product.id,
                 'name': product.name,
                 'price': combination_info['price'],
-                'price_formatted': self.env['ir.qweb']._render(
-                    'web.monetary_field', 
-                    {
-                        'value': combination_info['price'],
-                        'currency': pricelist.currency_id,
-                        'display_currency': pricelist.currency_id
-                    }
-                ),
+                'price_formatted': pricelist.currency_id.format(combination_info['price']),
                 'image_url': image_url,
             })
             
