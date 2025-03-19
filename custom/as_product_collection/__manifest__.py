@@ -20,7 +20,7 @@
     'version': '0.1',
     'sequence': '1',
 
-    'depends': ['base', 'website', 'website_sale', 'web_editor', 'web'],
+    'depends': ['base', 'website', 'website_sale'],
 
     'data': [
         'security/ir.model.access.csv',
@@ -40,12 +40,9 @@
             'as_product_collection/static/src/snippets/s_product_collection_snippet/000.scss',
         ],
         'website.assets_wysiwyg': [
+            'as_product_collection/static/src/js/components/collection_dialog/collection_dialog.js',
+            'as_product_collection/static/src/js/components/collection_dialog/dialog_template.xml',
             'as_product_collection/static/src/snippets/s_product_collection_snippet/options.js',
-            'as_product_collection/static/src/snippets/s_product_collection_snippet/dialog_template.xml',
-        ],
-        'web.assets_wysiwyg': [
-            'as_product_collection/static/src/snippets/s_product_collection_snippet/options.js',
-            'as_product_collection/static/src/snippets/s_product_collection_snippet/dialog_template.xml',
         ],
     },
     

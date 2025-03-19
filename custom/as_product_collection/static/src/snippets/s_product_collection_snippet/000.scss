@@ -1,4 +1,8 @@
 .s_product_collection_snippet {
+  &.container {
+    visibility: unset !important;
+  }
+
   // Different cards per row options
   &.s_cards_per_row_2 {
     .card-column {
@@ -18,10 +22,6 @@
         max-width: 33.333% !important;
       }
     }
-  }
-
-  &.s_cards_per_row_4 {
-    // Default Bootstrap behavior
   }
 
   &.s_cards_per_row_6 {
