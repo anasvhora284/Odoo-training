@@ -23,6 +23,18 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
     if (!this.collectionId) return;
 
     try {
+      // Get collection name
+      const collectionInfo = await rpc(
+        "/product_collection/get_collection_info",
+        { collection_id: this.collectionId }
+      );
+
+      const collectionName =
+        collectionInfo && collectionInfo.name
+          ? collectionInfo.name
+          : "Product Collection";
+
+      // Get products
       const products = await rpc(
         "/product_collection/get_collection_products",
         { collection_id: this.collectionId }
@@ -30,6 +42,12 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
 
       const container = this.el.querySelector(".container");
       container.innerHTML = "";
+
+      // Add collection title
+      const titleElement = document.createElement("h2");
+      titleElement.className = "collection-title text-center mb-4";
+      titleElement.textContent = collectionName;
+      container.appendChild(titleElement);
 
       if (products && products.length) {
         const row = document.createElement("div");
@@ -60,11 +78,12 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
 
         container.appendChild(row);
 
+        // Keep content visible after animation
         row.classList.add(
           "o_animate",
           "o_animate_in",
           "o_animate_fade_in",
-          "o_visible"
+          "visible"
         );
 
         const placeholder = container.querySelector(".collection-placeholder");

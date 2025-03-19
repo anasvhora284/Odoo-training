@@ -99,7 +99,7 @@ options.registry.SelectCollection = options.Class.extend({
           "o_animate",
           "o_animate_in",
           "o_animate_fade_in",
-          "o_visible"
+          "visible"
         );
 
         const placeholder = container.querySelector(".collection-placeholder");
