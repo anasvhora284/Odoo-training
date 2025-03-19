@@ -40,18 +40,6 @@ options.registry.SelectCollection = options.Class.extend({
     if (!collectionId) return;
 
     try {
-      const collectionInfo = await this.orm.call(
-        "website.product.collection",
-        "search_read",
-        [[["id", "=", parseInt(collectionId)]]],
-        { fields: ["name"] }
-      );
-
-      const collectionName =
-        collectionInfo && collectionInfo.length > 0
-          ? collectionInfo[0].name
-          : "Product Collection";
-
       const products = await this.orm.call(
         "website.product.collection",
         "get_collection_products",
@@ -60,11 +48,6 @@ options.registry.SelectCollection = options.Class.extend({
 
       const container = this.$target[0].querySelector(".container");
       container.innerHTML = ``;
-
-      const titleElement = document.createElement("h2");
-      titleElement.className = "collection-title text-center mb-4";
-      titleElement.textContent = collectionName;
-      container.appendChild(titleElement);
 
       if (products && products.length) {
         const row = document.createElement("div");

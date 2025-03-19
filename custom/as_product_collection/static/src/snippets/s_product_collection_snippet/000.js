@@ -30,16 +30,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
     if (!this.collectionId) return;
 
     try {
-      const collectionInfo = await rpc(
-        "/product_collection/get_collection_info",
-        { collection_id: this.collectionId }
-      );
-
-      const collectionName =
-        collectionInfo && collectionInfo.name
-          ? collectionInfo.name
-          : "Product Collection";
-
       const products = await rpc(
         "/product_collection/get_collection_products",
         { collection_id: this.collectionId }
@@ -47,11 +37,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
 
       const container = this.el.querySelector(".container");
       container.innerHTML = "";
-
-      const titleElement = document.createElement("h2");
-      titleElement.className = "collection-title text-center mb-4";
-      titleElement.textContent = collectionName;
-      container.appendChild(titleElement);
 
       if (products && products.length) {
         const row = document.createElement("div");
