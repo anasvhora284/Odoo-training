@@ -9,6 +9,24 @@
     <template id="snippet_options" inherit_id="website.snippet_options" name="Product Collection Options">
         <xpath expr="." position="inside">
             <div data-js="SelectCollection" data-selector=".s_product_collection_snippet" data-no-check="true">
+                <we-button title="Select Collection" data-name="select_collection">
+                    <i class="fa fa-fw fa-tag"/>
+ Collection
+                </we-button>
+                <we-row>
+                    <we-button title="Grid View" data-name="grid_view_opt" data-select-class="s_grid_view">
+                        <i class="fa fa-th"/>
+                    </we-button>
+                    <we-button title="List View" data-name="list_view_opt" data-select-class="s_list_view">
+                        <i class="fa fa-list"/>
+                    </we-button>
+                </we-row>
+                <we-select string="Cards per row" data-attribute-name="cards-per-row" data-attribute-default-value="4">
+                    <we-button data-select-class="s_cards_per_row_2" data-name="cards_per_row_2_opt">2</we-button>
+                    <we-button data-select-class="s_cards_per_row_3" data-name="cards_per_row_3_opt">3</we-button>
+                    <we-button data-select-class="s_cards_per_row_4" data-name="cards_per_row_4_opt">4</we-button>
+                    <we-button data-select-class="s_cards_per_row_6" data-name="cards_per_row_6_opt">6</we-button>
+                </we-select>
             </div>
         </xpath>
     </template>

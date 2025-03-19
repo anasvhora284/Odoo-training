@@ -1,9 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <template id="s_product_collection_snippet" name="Product Collection">
-        <section class="s_product_collection_snippet pt32 pb32" data-snippet="s_product_collection_snippet">
+        <section class="s_product_collection_snippet pt32 pb32" data-snippet="s_product_collection_snippet" data-collection-id="">
             <div class="container">
-                <p class="hello-world">Hello World</p>
+                <div class="text-center py-4 collection-placeholder">
+                    <h3 class="mb-3">Product Collection</h3>
+                    <p class="mb-3">Select a product collection to display products here.</p>
+                    <div class="o_we_shape o_web_editor_edited">
+                        <i class="fa fa-shopping-cart fa-4x text-muted mb-3"></i>
+                    </div>
+                    <p class="small text-muted">In edit mode, click "Select Collection" from the options to choose products.</p>
+                </div>
             </div>
         </section>
     </template>
