@@ -15,11 +15,11 @@
                     <div t-else="" class="d-flex flex-column">
                         <div class="form-group mb-3">
                             <label for="collection-selector" class="form-label">Select Collection</label>
-                            <select id="collection-selector" class="form-select" t-on-change="onCollectionChange">
+                            <select id="collection-selector" class="form-select" t-model="state.selectedCollection" t-on-change="onCollectionChange">
                                 <option value="">-- Select a Collection --</option>
                                 <t t-foreach="state.collections" t-as="collection" t-key="collection.id">
-                                    <option t-att-value="collection.id" t-att-selected="collection.id === state.selectedCollection">
-                                        <t t-esc="collection.name"/>
+                                    <option t-att-value="collection.id">
+                                        <t t-out="collection.name"/>
                                     </option>
                                 </t>
                             </select>

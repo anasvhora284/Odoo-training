@@ -16,7 +16,7 @@ class DilogBoxBody extends Component {
   setup() {
     this.state = useState({
       collections: [],
-      selectedCollection: null,
+      selectedCollection: "",
       loading: false,
       error: null,
     });
@@ -35,6 +35,15 @@ class DilogBoxBody extends Component {
         { fields: ["id", "name"] }
       );
       this.state.collections = result || [];
+
+      // Check if already has collection ID from snippet
+      if (this.props.snippetEl) {
+        const collectionId = this.props.snippetEl.dataset.collectionId;
+        if (collectionId) {
+          this.state.selectedCollection = collectionId;
+        }
+      }
+
       if (this.state.collections.length === 0) {
         this.state.error =
           "No collections found. Please create a collection first.";
@@ -49,7 +58,11 @@ class DilogBoxBody extends Component {
 
   onCollectionChange(ev) {
     const collectionId = ev.target.value;
-    this.state.selectedCollection = collectionId;
+    if (collectionId) {
+      this.state.selectedCollection = collectionId;
+    } else {
+      this.state.selectedCollection = "";
+    }
     this.state.error = null;
   }
 
