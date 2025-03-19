@@ -17,6 +17,23 @@ class ProductCollectionController(http.Controller):
             _logger.error(f"Error fetching collections: {str(e)}")
             return []
 
+    @http.route('/product_collection/get_collection_info', type='json', auth='public', website=True)
+    def get_collection_info(self, collection_id):
+        try:
+            collection_id = int(collection_id)
+            collection = request.env['website.product.collection'].sudo().search_read(
+                [('id', '=', collection_id)], ['id', 'name']
+            )
+            if collection:
+                _logger.info(f"Found collection info for collection {collection_id}")
+                return collection[0]
+            else:
+                _logger.warning(f"Collection {collection_id} not found")
+                return {'name': 'Product Collection'}
+        except Exception as e:
+            _logger.error(f"Error fetching collection info for collection {collection_id}: {str(e)}")
+            return {'name': 'Product Collection'}
+
     @http.route('/product_collection/get_collection_products', type='json', auth='public', website=True)
     def get_collection_products(self, collection_id):
         try:
@@ -60,4 +77,4 @@ class ProductCollectionController(http.Controller):
                 'collections': [],
                 'products': [],
                 'error': str(e)
-            } 
+            }

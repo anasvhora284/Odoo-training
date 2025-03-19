@@ -8,9 +8,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
   selector: ".s_product_collection_snippet",
   disabledInEditableMode: false,
 
-  /**
-   * @override
-   */
   start() {
     this.collectionId =
       this.el.dataset.collectionId ||
@@ -22,10 +19,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
     return this._super(...arguments);
   },
 
-  /**
-   *
-   * @private
-   */
   _renderProducts: debounce(async function () {
     if (!this.collectionId) return;
 
@@ -71,7 +64,7 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
           "o_animate",
           "o_animate_in",
           "o_animate_fade_in",
-          "visible"
+          "o_visible"
         );
 
         const placeholder = container.querySelector(".collection-placeholder");

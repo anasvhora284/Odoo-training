@@ -1,6 +1,17 @@
 .s_product_collection_snippet {
   &.container {
-    visibility: unset !important;
+    visibility: visible !important;
+  }
+
+  // Add editor-specific styles
+  .o_editor_enable & {
+    .container {
+      min-height: 100px;
+    }
+
+    .collection-placeholder {
+      display: block !important;
+    }
   }
 
   // Different cards per row options
