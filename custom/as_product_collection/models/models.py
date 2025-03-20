@@ -40,12 +40,18 @@ class ProductCollection(models.Model):
                 combination_info = product_with_context._get_combination_info()
                 image_url = f'/web/image/product.template/{product.id}/image_512'
                 
+                # Get the product.product record matching the template
+                product_variant = self.env['product.product'].search([
+                    ('product_tmpl_id', '=', product.id)
+                ], limit=1)
+                
                 products_data.append({
-                    'id': product.id,
+                    'id': product_variant.id,
                     'name': product.name,
                     'price': combination_info['price'],
                     'price_formatted': pricelist.currency_id.format(combination_info['price']),
                     'image_url': image_url,
+                    'product_template_id': product.id
                 })
             except Exception:
                 continue

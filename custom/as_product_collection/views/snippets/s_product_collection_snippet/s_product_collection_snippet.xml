@@ -14,4 +14,10 @@
             </div>
         </section>
     </template>
+
+    <template id="s_product_collection_snippet_options" inherit_id="website.snippet_options">
+        <xpath expr="." position="inside">
+            <div data-js="SelectCollection" data-selector=".s_product_collection_snippet"/>
+        </xpath>
+    </template>
 </odoo>

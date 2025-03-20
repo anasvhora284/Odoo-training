@@ -141,6 +141,7 @@ options.registry.SelectCollection = options.Class.extend({
     row.className = "row g-3";
 
     products.forEach((product) => {
+      console.log(product, "product options.js");
       const col = this._createProductCard(product);
       row.appendChild(col);
     });
@@ -154,17 +155,32 @@ options.registry.SelectCollection = options.Class.extend({
     const col = document.createElement("div");
     col.className = "col-12 col-sm-6 col-md-4 col-lg-3 card-column";
 
-    const productLink = `/shop/product/${product.id}`;
+    const productLink = `/shop/product/${product.product_template_id}`;
 
     col.innerHTML = `
-      <div class="card h-100">
-        <a href="${productLink}" class="text-decoration-none">
-          <img src="${product.image_url}" class="card-img-top" alt="${product.name}"/>
-          <div class="card-body">
-            <h5 class="card-title text-dark">${product.name}</h5>
-            <p class="card-text text-primary">${product.price_formatted}</p>
+      <div class="card h-100 w-100 oe_product_cart">
+        <form class="js_add_cart_variants" action="/shop/cart/update" method="POST">
+          <input type="hidden" name="csrf_token" value="${odoo.csrf_token}"/>
+          <a href="${productLink}" class="text-decoration-none">
+            <img src="${product.image_url}" class="card-img-top" alt="${product.name}"/>
+            <div class="card-body">
+              <h5 class="card-title text-dark">${product.name}</h5>
+              <p class="card-text text-primary">${product.price_formatted}</p>
+            </div>
+          </a>
+          <div class="o_wsale_product_btn w-100 mb-2 d-flex justify-content-center align-items-center gap-1">
+            <input type="hidden" name="product_id" value="${product.id}"/>
+            <a role="button" class="btn btn-secondary o_add_wishlist" data-product-template-id="${product.product_template_id}" title="Add to Wishlist">
+              <i class="fa fa-heart"></i>
+            </a>
+            <button type="submit" class="btn btn-primary a-submit js_add_cart" title="Add to Cart">
+              <i class="fa fa-shopping-cart"></i>
+            </button>
+            <a role="button" class="btn btn-secondary o_add_compare" data-product-template-id="${product.product_template_id}" title="Compare">
+              <i class="fa fa-exchange"></i>
+            </a>
           </div>
-        </a>
+        </form>
       </div>
     `;
 

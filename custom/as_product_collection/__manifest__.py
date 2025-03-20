@@ -20,7 +20,13 @@
     'version': '0.1',
     'sequence': '1',
 
-    'depends': ['base', 'website', 'website_sale'],
+    'depends': [
+        'base',
+        'website',
+        'website_sale',
+        'website_sale_comparison',
+        'website_sale_wishlist'
+    ],
 
     'data': [
         'security/ir.model.access.csv',
@@ -36,8 +42,13 @@
 
     'assets': {
         'web.assets_frontend': [
+            # Module assets
             'as_product_collection/static/src/snippets/s_product_collection_snippet/000.js',
             'as_product_collection/static/src/snippets/s_product_collection_snippet/000.scss',
+            # Website sale dependencies
+            ('include', 'website_sale.assets_frontend'),
+            ('include', 'website_sale_comparison.assets_frontend'),
+            ('include', 'website_sale_wishlist.assets_frontend'),
         ],
         'website.assets_wysiwyg': [
             'as_product_collection/static/src/js/components/collection_dialog/collection_dialog.js',
