@@ -11,26 +11,43 @@ class ProductCollection(models.Model):
     name = fields.Char(string='Name', required=True)
     product_ids = fields.Many2many('product.template', string='Products')
 
+    def get_collection_data(self):
+        self.ensure_one()
+        products = self.get_collection_products()
+        return {
+            'id': self.id,
+            'name': self.name,
+            'products': products,
+        }
+    
     def get_collection_products(self):
         self.ensure_one()
+        
+        if not self.product_ids:
+            return []
+            
         website = self.env['website'].get_current_website()
         pricelist = website._get_current_pricelist()
         products_data = []
         
         for product in self.product_ids:
-            combination_info = product.with_context(
-                website_id=website.id,
-                pricelist=pricelist.id,
-            )._get_combination_info()
-            
-            image_url = f'/web/image/product.template/{product.id}/image_512'
-            
-            products_data.append({
-                'id': product.id,
-                'name': product.name,
-                'price': combination_info['price'],
-                'price_formatted': pricelist.currency_id.format(combination_info['price']),
-                'image_url': image_url,
-            })
-            
+            try:
+                product_with_context = product.with_context(
+                    website_id=website.id,
+                    pricelist=pricelist.id,
+                )
+                
+                combination_info = product_with_context._get_combination_info()
+                image_url = f'/web/image/product.template/{product.id}/image_512'
+                
+                products_data.append({
+                    'id': product.id,
+                    'name': product.name,
+                    'price': combination_info['price'],
+                    'price_formatted': pricelist.currency_id.format(combination_info['price']),
+                    'image_url': image_url,
+                })
+            except Exception:
+                continue
+                
         return products_data

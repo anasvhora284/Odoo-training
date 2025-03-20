@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import options from "@web_editor/js/editor/snippets.options";
-import DilogBoxBody from "../../js/components/collection_dialog/collection_dialog";
+import CollectionDialog from "../../js/components/collection_dialog/collection_dialog";
 
 options.registry.SelectCollection = options.Class.extend({
   init() {
@@ -13,133 +13,14 @@ options.registry.SelectCollection = options.Class.extend({
     await this._super(...arguments);
   },
 
-  onBuilt() {
-    this._openCollectionDialog();
-  },
-
-  _openCollectionDialog() {
-    const dialogService = this.bindService("dialog");
-    dialogService.add(DilogBoxBody, {
-      title: "Select Product Collection",
-      snippetEl: this.$target[0],
-      onCollectionSelected: (collectionId) => {
-        this._setCollectionId(collectionId);
-      },
-    });
-  },
-
-  _setCollectionId(collectionId) {
-    if (!collectionId) return;
-
-    this.$target[0].dataset.collectionId = collectionId;
-    this.$target.attr("data-collection-id", collectionId);
-    this._renderSnippetProducts(collectionId);
-  },
-
-  async _renderSnippetProducts(collectionId) {
-    if (!collectionId) return;
-
-    try {
-      const collectionInfo = await this.orm.call(
-        "website.product.collection",
-        "search_read",
-        [[["id", "=", parseInt(collectionId)]]],
-        { fields: ["name"] }
-      );
-
-      const collectionName =
-        collectionInfo && collectionInfo.length > 0
-          ? collectionInfo[0].name
-          : "Product Collection";
-
-      const products = await this.orm.call(
-        "website.product.collection",
-        "get_collection_products",
-        [[parseInt(collectionId)]]
-      );
-
-      const container = this.$target[0].querySelector(".container");
-      container.innerHTML = ``;
-
-      const titleElement = document.createElement("h2");
-      titleElement.className = "collection-title text-center mb-4";
-      titleElement.textContent = collectionName;
-      container.appendChild(titleElement);
-
-      if (products && products.length) {
-        const row = document.createElement("div");
-        row.className = "row g-3";
-
-        const isListView = this.$target[0].classList.contains("s_list_view");
-
-        products.forEach((product) => {
-          const col = document.createElement("div");
-          col.className = "col-12 col-sm-6 col-md-4 col-lg-3 card-column";
-
-          const productLink = `/shop/product/${product.id}`;
-
-          col.innerHTML = `
-            <div class="card h-100">
-              <a href="${productLink}" class="text-decoration-none">
-                <img src="${product.image_url}" class="card-img-top" alt="${product.name}"/>
-                <div class="card-body">
-                  <h5 class="card-title text-dark">${product.name}</h5>
-                  <p class="card-text text-primary">${product.price_formatted}</p>
-                </div>
-              </a>
-            </div>
-          `;
-
-          row.appendChild(col);
-        });
-
-        container.appendChild(row);
-
-        row.classList.add(
-          "o_animate",
-          "o_animate_in",
-          "o_animate_fade_in",
-          "visible"
-        );
-
-        const placeholder = container.querySelector(".collection-placeholder");
-        if (placeholder) {
-          placeholder.remove();
-        }
-      } else {
-        const alert = document.createElement("div");
-        alert.className = "alert alert-info";
-        alert.textContent = "No products found in this collection.";
-        container.appendChild(alert);
-      }
-    } catch (error) {
-      console.error("Failed to load products:", error);
-      const container = this.$target[0].querySelector(".container");
-      const errorAlert = document.createElement("div");
-      errorAlert.className = "alert alert-danger";
-      errorAlert.textContent = "Failed to load products. Please try again.";
-      container.innerHTML = "";
-      container.appendChild(errorAlert);
-    }
-  },
-
   start() {
     const res = this._super(...arguments);
     this.orm = this.bindService("orm");
     return res;
   },
 
-  cleanForSave() {
-    const container = this.$target[0].querySelector(".container");
-    if (container) {
-      const alerts = container.querySelectorAll(".alert");
-      alerts.forEach((alert) => alert.remove());
-
-      const collectionId = this.$target[0].dataset.collectionId;
-      if (collectionId) {
-        this.$target.attr("data-collection-id", collectionId);
-      }
-    }
+  onBuilt() {
+    this._openCollectionDialog();
   },
 
   buildSnippetMenuOptions() {
@@ -162,12 +43,175 @@ options.registry.SelectCollection = options.Class.extend({
       optionName === "list_view_opt" ||
       optionName.startsWith("cards_per_row_")
     ) {
-      const collectionId = this.$target[0].dataset.collectionId;
-      if (collectionId) {
-        this._renderSnippetProducts(collectionId);
-      }
+      this._refreshProductDisplay();
     } else {
       this._super(...arguments);
+    }
+  },
+
+  cleanForSave() {
+    const container = this.$target[0].querySelector(".container");
+    if (container) {
+      this._removeAlerts(container);
+      this._ensureDataAttributeIsSet();
+    }
+  },
+
+  _openCollectionDialog() {
+    const dialogService = this.bindService("dialog");
+    dialogService.add(CollectionDialog, {
+      title: "Select Product Collection",
+      snippetEl: this.$target[0],
+      onCollectionSelected: (collectionId) => {
+        this._setCollectionId(collectionId);
+      },
+    });
+  },
+
+  _setCollectionId(collectionId) {
+    if (!collectionId) return;
+
+    this.$target[0].dataset.collectionId = collectionId;
+    this.$target.attr("data-collection-id", collectionId);
+    this._renderSnippetProducts(collectionId);
+  },
+
+  _refreshProductDisplay() {
+    const collectionId = this.$target[0].dataset.collectionId;
+    if (collectionId) {
+      this._renderSnippetProducts(collectionId);
+    }
+  },
+
+  async _renderSnippetProducts(collectionId) {
+    if (!collectionId) return;
+
+    try {
+      const collectionData = await this._getCollectionData(collectionId);
+      this._updateSnippetUI(collectionData);
+    } catch (error) {
+      this._showErrorMessage();
+    }
+  },
+
+  async _getCollectionData(collectionId) {
+    collectionId = parseInt(collectionId);
+
+    try {
+      const data = await this.orm.call(
+        "website.product.collection",
+        "get_collection_data",
+        [[collectionId]]
+      );
+
+      return {
+        name: data.name || "Product Collection",
+        products: data.products || [],
+      };
+    } catch (error) {
+      return {
+        name: "Product Collection",
+        products: [],
+      };
+    }
+  },
+
+  _updateSnippetUI(collectionData) {
+    const container = this.$target[0].querySelector(".container");
+    container.innerHTML = "";
+
+    this._addCollectionTitle(container, collectionData.name);
+
+    if (collectionData.products && collectionData.products.length) {
+      this._renderProductsGrid(container, collectionData.products);
+    } else {
+      this._showNoProductsMessage(container);
+    }
+  },
+
+  _addCollectionTitle(container, title) {
+    const titleElement = document.createElement("h2");
+    titleElement.className = "collection-title text-center mb-4";
+    titleElement.textContent = title;
+    container.appendChild(titleElement);
+  },
+
+  _renderProductsGrid(container, products) {
+    const row = document.createElement("div");
+    row.className = "row g-3";
+
+    products.forEach((product) => {
+      const col = this._createProductCard(product);
+      row.appendChild(col);
+    });
+
+    container.appendChild(row);
+    this._applyAnimationClasses(row);
+    this._removePlaceholder(container);
+  },
+
+  _createProductCard(product) {
+    const col = document.createElement("div");
+    col.className = "col-12 col-sm-6 col-md-4 col-lg-3 card-column";
+
+    const productLink = `/shop/product/${product.id}`;
+
+    col.innerHTML = `
+      <div class="card h-100">
+        <a href="${productLink}" class="text-decoration-none">
+          <img src="${product.image_url}" class="card-img-top" alt="${product.name}"/>
+          <div class="card-body">
+            <h5 class="card-title text-dark">${product.name}</h5>
+            <p class="card-text text-primary">${product.price_formatted}</p>
+          </div>
+        </a>
+      </div>
+    `;
+
+    return col;
+  },
+
+  _applyAnimationClasses(element) {
+    element.classList.add(
+      "o_animate",
+      "o_animate_in",
+      "o_animate_fade_in",
+      "visible"
+    );
+  },
+
+  _removePlaceholder(container) {
+    const placeholder = container.querySelector(".collection-placeholder");
+    if (placeholder) {
+      placeholder.remove();
+    }
+  },
+
+  _showNoProductsMessage(container) {
+    const alert = document.createElement("div");
+    alert.className = "alert alert-info";
+    alert.textContent = "No products found in this collection.";
+    container.appendChild(alert);
+  },
+
+  _showErrorMessage() {
+    const container = this.$target[0].querySelector(".container");
+    const errorAlert = document.createElement("div");
+    errorAlert.className = "alert alert-danger";
+    errorAlert.textContent = "Failed to load products. Please try again.";
+    container.innerHTML = "";
+    container.appendChild(errorAlert);
+  },
+
+  _removeAlerts(container) {
+    const alerts = container.querySelectorAll(".alert");
+    alerts.forEach((alert) => alert.remove());
+  },
+
+  _ensureDataAttributeIsSet() {
+    const collectionId = this.$target[0].dataset.collectionId;
+    if (collectionId) {
+      this.$target.attr("data-collection-id", collectionId);
     }
   },
 });

@@ -3,9 +3,9 @@
 import { Dialog } from "@web/core/dialog/dialog";
 import { Component, useState } from "@odoo/owl";
 
-class DilogBoxBody extends Component {
+class CollectionDialog extends Component {
   static components = { Dialog };
-  static template = "as_product_collection.DilogBoxBody";
+  static template = "as_product_collection.CollectionDialog";
   static props = {
     title: { type: String, optional: true },
     close: { type: Function },
@@ -28,6 +28,7 @@ class DilogBoxBody extends Component {
     try {
       this.state.loading = true;
       this.state.error = null;
+
       const result = await this.env.services.orm.call(
         "website.product.collection",
         "search_read",
@@ -36,33 +37,30 @@ class DilogBoxBody extends Component {
       );
       this.state.collections = result || [];
 
-      // Check if already has collection ID from snippet
-      if (this.props.snippetEl) {
-        const collectionId = this.props.snippetEl.dataset.collectionId;
-        if (collectionId) {
-          this.state.selectedCollection = collectionId;
-        }
-      }
+      this._setInitialSelectedCollection();
 
       if (this.state.collections.length === 0) {
         this.state.error =
           "No collections found. Please create a collection first.";
       }
     } catch (error) {
-      console.error("Failed to load collections:", error);
       this.state.error = "Failed to load collections. Please try again.";
     } finally {
       this.state.loading = false;
     }
   }
 
-  onCollectionChange(ev) {
-    const collectionId = ev.target.value;
-    if (collectionId) {
-      this.state.selectedCollection = collectionId;
-    } else {
-      this.state.selectedCollection = "";
+  _setInitialSelectedCollection() {
+    if (this.props.snippetEl) {
+      const collectionId = this.props.snippetEl.dataset.collectionId;
+      if (collectionId) {
+        this.state.selectedCollection = collectionId;
+      }
     }
+  }
+
+  onCollectionChange(ev) {
+    this.state.selectedCollection = ev.target.value || "";
     this.state.error = null;
   }
 
@@ -74,4 +72,4 @@ class DilogBoxBody extends Component {
   }
 }
 
-export default DilogBoxBody;
+export default CollectionDialog;

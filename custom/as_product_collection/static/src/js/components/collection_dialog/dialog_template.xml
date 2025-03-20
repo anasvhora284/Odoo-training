@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <t t-name="as_product_collection.DilogBoxBody" owl="1">
+    <t t-name="as_product_collection.CollectionDialog" owl="1">
         <Dialog t-props="{ title: props.title, size: 'xl' }">
             <div class="collection-dialog-content">
                 <div t-if="state.loading" class="text-center p-4">
