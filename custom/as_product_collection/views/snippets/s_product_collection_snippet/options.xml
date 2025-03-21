@@ -10,7 +10,8 @@
         <xpath expr="." position="inside">
             <div data-js="SelectCollection" data-selector=".s_product_collection_snippet" data-no-check="true">
                 <we-button title="Select Collection" data-name="select_collection">
-                    <i class="fa fa-fw fa-tag"/> Collection
+                    <i class="fa fa-fw fa-tag"/>
+ Collection
                 </we-button>
                 <we-row>
                     <we-button title="Grid View" data-name="grid_view_opt" data-select-class="s_grid_view">

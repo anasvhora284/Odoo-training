@@ -27,15 +27,7 @@ options.registry.SelectCollection = options.Class.extend({
   },
 
   onBuilt() {
-    if (options.registry.SelectCollection._primaryInstance === undefined) {
-      options.registry.SelectCollection._primaryInstance = this._instanceId;
-    }
-
-    if (
-      options.registry.SelectCollection._primaryInstance === this._instanceId
-    ) {
-      this._openCollectionDialog();
-    }
+    this._openCollectionDialog();
   },
 
   _openCollectionDialog() {
@@ -48,6 +40,7 @@ options.registry.SelectCollection = options.Class.extend({
     const closeCallback = () => {
       options.registry.SelectCollection._activeDialog = null;
     };
+
     options.registry.SelectCollection._activeDialog = dialogService.add(
       CollectionDialog,
       {
@@ -225,12 +218,6 @@ options.registry.SelectCollection = options.Class.extend({
   destroy() {
     if (options.registry.SelectCollection._instances) {
       options.registry.SelectCollection._instances.delete(this._instanceId);
-    }
-
-    if (
-      options.registry.SelectCollection._primaryInstance === this._instanceId
-    ) {
-      options.registry.SelectCollection._primaryInstance = undefined;
     }
 
     this._super(...arguments);

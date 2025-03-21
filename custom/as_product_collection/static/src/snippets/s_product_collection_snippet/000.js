@@ -128,8 +128,9 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
                     data-product-template-id="${product.product_tmpl_id}" 
                     data-product-product-id="${product.id}" 
                     data-action="o_wishlist" 
+                    aria-label="Add to wishlist"
                     title="Add to Wishlist">
-                    <i class="fa fa-heart" aria-label="Add to wishlist"></i>
+                    <i class="fa fa-heart"></i>
                   </button>
                   <button type="submit" class="btn btn-primary a-submit js_add_cart" title="Add to Cart">
                     <i class="fa fa-shopping-cart"></i>
@@ -137,8 +138,9 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
                   <button type="button" class="btn btn-light o_add_compare d-none d-md-inline-block" 
                     data-product-product-id="${product.id}" 
                     data-action="o_comparelist" 
+                    aria-label="Compare"
                     title="Compare">
-                    <i class="fa fa-exchange" aria-label="Compare"></i>
+                    <i class="fa fa-exchange"></i>
                   </button>
                 </div>
               </div>
