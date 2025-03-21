@@ -3,109 +3,184 @@
 import publicWidget from "@web/legacy/js/public/public_widget";
 import { rpc } from "@web/core/network/rpc";
 
-publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
-  selector: ".s_product_collection_snippet",
-  disabledInEditableMode: false,
+// Shared wishlist state across all snippet instances
+const globalWishlistState = {
+    productIDs: [],
+    initialized: false,
 
-  init() {
-    this._super(...arguments);
-  },
+    async init() {
+        if (this.initialized) return;
 
-  start() {
-    this.collectionId =
-      this.el.dataset.collectionId ||
-      this.el.getAttribute("data-collection-id") ||
-      false;
-    if (this.collectionId && !this.editableMode) {
-      return this._renderProducts();
-    }
-    return this._super(...arguments);
-  },
-
-  async _renderProducts() {
-    if (!this.collectionId) return;
-
-    try {
-      const data = await this._getCollectionData();
-      this._renderCollectionUI(data);
-    } catch (error) {
-      this._showErrorMessage();
-    }
-  },
-
-  async _getCollectionData() {
-    try {
-      const collectionId = parseInt(this.collectionId);
-      const result = await rpc(
-        "/web/dataset/call_kw/website.product.collection/get_collection_data",
-        {
-          model: "website.product.collection",
-          method: "get_collection_data",
-          args: [[collectionId]],
-          kwargs: {},
+        try {
+            this.productIDs = JSON.parse(
+                sessionStorage.getItem("website_sale_wishlist_product_ids") || "[]"
+            );
+            const res = await fetch("/shop/wishlist", {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                },
+            });
+            const data = await res.json();
+            this.productIDs = data;
+            sessionStorage.setItem("website_sale_wishlist_product_ids", JSON.stringify(data));
+            this.updateHeaderCounter();
+            this.initialized = true;
+        } catch (error) {
+            console.error("Error initializing wishlist state", error);
+            this.productIDs = [];
         }
-      );
+    },
 
-      return {
-        collectionInfo: { name: result.name || "Product Collection" },
-        products: result.products || [],
-      };
-    } catch (error) {
-      return {
-        collectionInfo: { name: "Product Collection" },
-        products: [],
-      };
-    }
-  },
+    hasProduct(productId) {
+        return this.productIDs.includes(parseInt(productId));
+    },
 
-  _renderCollectionUI(data) {
-    const container = this.el.querySelector(".container");
-    container.innerHTML = "";
+    updateHeaderCounter() {
+        this.productIDs = JSON.parse(
+            sessionStorage.getItem("website_sale_wishlist_product_ids") || "[]"
+        );
 
-    const titleElement = document.createElement("h2");
-    titleElement.className = "collection-title text-center mb-4";
-    titleElement.textContent = data.collectionInfo
-      ? data.collectionInfo.name
-      : "Product Collection";
-    container.appendChild(titleElement);
+        console.log(this.productIDs, "length:", this.productIDs.length + 1, "updated length");
+        const $wishButton = document.querySelector("header .o_wsale_my_wish");
+        if ($wishButton) {
+            const $count = $wishButton.querySelector(".my_wish_quantity");
+            if ($count) {
+                $count.textContent = this.productIDs.length;
+            }
 
-    if (data.products && data.products.length) {
-      this._renderProductCards(container, data.products);
-    } else {
-      this._showNoProductsMessage(container);
-    }
-  },
+            if ($wishButton.classList.contains("o_wsale_my_wish_hide_empty")) {
+                $wishButton.classList.toggle("d-none", !this.productIDs.length);
+            }
+        }
+    },
+};
 
-  _renderProductCards(container, products) {
-    const row = document.createElement("div");
-    row.className = "row g-3";
+publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
+    selector: ".s_product_collection_snippet",
+    events: {
+        "click .wishlist_btn_cutom_class": "updateHeaderCounter",
+    },
+    disabledInEditableMode: false,
 
-    products.forEach((product) => {
-      const col = this._createProductCard(product);
-      row.appendChild(col);
-    });
+    init() {
+        this._super(...arguments);
+    },
 
-    container.appendChild(row);
-    row.classList.add(
-      "o_animate",
-      "o_animate_in",
-      "o_animate_fade_in",
-      "visible"
-    );
+    start() {
+        this.collectionId =
+            this.el.dataset.collectionId || this.el.getAttribute("data-collection-id") || false;
 
-    const placeholder = container.querySelector(".collection-placeholder");
-    if (placeholder) {
-      placeholder.remove();
-    }
-  },
+        // Initialize wishlist state
+        globalWishlistState.init();
 
-  _createProductCard(product) {
-    const col = document.createElement("div");
-    col.className = "col-12 col-sm-6 col-md-4 col-lg-3 card-column";
+        if (this.collectionId && !this.editableMode) {
+            return this._renderProducts();
+        }
+        return this._super(...arguments);
+    },
 
-    const productLink = `/shop/product/${product.product_tmpl_id}`;
+    async _renderProducts() {
+        if (!this.collectionId) return;
 
-    col.innerHTML = `
+        try {
+            const data = await this._getCollectionData();
+            this._renderCollectionUI(data);
+        } catch (error) {
+            this._showErrorMessage();
+        }
+    },
+
+    async _getCollectionData() {
+        try {
+            const collectionId = parseInt(this.collectionId);
+            const result = await rpc(
+                "/web/dataset/call_kw/website.product.collection/get_collection_data",
+                {
+                    model: "website.product.collection",
+                    method: "get_collection_data",
+                    args: [[collectionId]],
+                    kwargs: {},
+                }
+            );
+
+            return {
+                collectionInfo: { name: result.name || "Product Collection" },
+                products: result.products || [],
+            };
+        } catch (error) {
+            return {
+                collectionInfo: { name: "Product Collection" },
+                products: [],
+            };
+        }
+    },
+
+    _renderCollectionUI(data) {
+        const container = this.el.querySelector(".container");
+        container.innerHTML = "";
+
+        const titleElement = document.createElement("h2");
+        titleElement.className = "collection-title text-center mb-4";
+        titleElement.textContent = data.collectionInfo
+            ? data.collectionInfo.name
+            : "Product Collection";
+        container.appendChild(titleElement);
+
+        if (data.products && data.products.length) {
+            this._renderProductCards(container, data.products);
+        } else {
+            this._showNoProductsMessage(container);
+        }
+    },
+
+    _renderProductCards(container, products) {
+        const row = document.createElement("div");
+        row.className = "row g-3";
+
+        products.forEach((product) => {
+            const col = this._createProductCard(product);
+            row.appendChild(col);
+        });
+
+        container.appendChild(row);
+        row.classList.add("o_animate", "o_animate_in", "o_animate_fade_in", "visible");
+
+        const placeholder = container.querySelector(".collection-placeholder");
+        if (placeholder) {
+            placeholder.remove();
+        }
+
+        // Update wishlist buttons state after rendering
+        this._updateWishlistButtonsState();
+    },
+
+    _updateWishlistButtonsState() {
+        const wishlistButtons = this.el.querySelectorAll(".o_add_wishlist");
+
+        wishlistButtons.forEach((button) => {
+            const productId = parseInt(button.dataset.productProductId);
+            if (globalWishlistState.hasProduct(productId)) {
+                button.classList.add("disabled");
+                button.setAttribute("disabled", "disabled");
+                button.title = "Already in wishlist";
+
+                // Add visual indicator
+                const icon = button.querySelector("i");
+                if (icon) {
+                    icon.classList.add("text-danger");
+                }
+            }
+        });
+    },
+
+    _createProductCard(product) {
+        const col = document.createElement("div");
+        col.className = "col-12 col-sm-6 col-md-4 col-lg-3 card-column";
+
+        const productLink = `/shop/product/${product.product_tmpl_id}`;
+
+        col.innerHTML = `
       <div class="card border-1 rounded-2 h-100 w-100 oe_product_cart js_product" data-product-id="${product.id}" data-product-template-id="${product.product_tmpl_id}">
         <form class="js_add_cart_variants" action="/shop/cart/update" method="POST">
           <input type="hidden" name="csrf_token" value="${odoo.csrf_token}"/>
@@ -124,7 +199,7 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
               </div>
               <div class="col-auto p-0">
                 <div class="o_wsale_product_btn d-flex align-items-center gap-2">
-                  <button type="button" class="btn btn-light o_add_wishlist" 
+                  <button type="button" class="btn btn-light o_add_wishlist o_add_wishlist_dyn wishlist_btn_cutom_class" 
                     data-product-template-id="${product.product_tmpl_id}" 
                     data-product-product-id="${product.id}" 
                     data-action="o_wishlist" 
@@ -150,22 +225,27 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
       </div>
     `;
 
-    return col;
-  },
+        return col;
+    },
 
-  _showNoProductsMessage(container) {
-    const alert = document.createElement("div");
-    alert.className = "alert alert-info";
-    alert.textContent = "No products found in this collection.";
-    container.appendChild(alert);
-  },
+    updateHeaderCounter() {
+        this._updateWishlistButtonsState();
+        globalWishlistState.updateHeaderCounter();
+    },
 
-  _showErrorMessage() {
-    const container = this.el.querySelector(".container");
-    const errorAlert = document.createElement("div");
-    errorAlert.className = "alert alert-danger";
-    errorAlert.textContent = "Failed to load products. Please try again.";
-    container.innerHTML = "";
-    container.appendChild(errorAlert);
-  },
+    _showNoProductsMessage(container) {
+        const alert = document.createElement("div");
+        alert.className = "alert alert-info";
+        alert.textContent = "No products found in this collection.";
+        container.appendChild(alert);
+    },
+
+    _showErrorMessage() {
+        const container = this.el.querySelector(".container");
+        const errorAlert = document.createElement("div");
+        errorAlert.className = "alert alert-danger";
+        errorAlert.textContent = "Failed to load products. Please try again.";
+        container.innerHTML = "";
+        container.appendChild(errorAlert);
+    },
 });

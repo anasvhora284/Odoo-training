@@ -1,16 +1,16 @@
 .card-body {
-  border-top: 2px solid #545557;
+    border-top: 2px solid #545557;
 }
 
 .wishlist-animation {
-  animation: pulse 1.5s ease-in-out infinite;
+    animation: pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
+    0% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

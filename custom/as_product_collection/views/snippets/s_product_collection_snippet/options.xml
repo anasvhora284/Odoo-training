@@ -2,7 +2,13 @@
 <odoo>
     <template id="snippets" inherit_id="website.snippets" name="Custom Snippets">
         <xpath expr="//t[@id='installed_snippets_hook']" position="after">
-            <t t-snippet="as_product_collection.s_product_collection_snippet" t-thumbnail="as_product_collection/static/description/icon.png" data-js="SelectCollection" data-selector=".s_product_collection_snippet" />
+            <t t-snippet="as_product_collection.s_product_collection_snippet" 
+               t-thumbnail="as_product_collection/static/description/icon.png" 
+               string="Product Collection" 
+               group="products"
+               data-js="SelectCollection" 
+               data-selector=".s_product_collection_snippet">
+            </t>
         </xpath>
     </template>
 
@@ -29,5 +35,16 @@
                 </we-select>
             </div>
         </xpath>
+    </template>
+    
+    <template id="s_product_collection_snippet_preview_data" name="Product Collection Preview Data">
+        <div class="text-center py-4">
+            <h3 class="mb-3">Product Collection</h3>
+            <p class="mb-3">Display your curated product collections here.</p>
+            <div class="o_we_shape">
+                <i class="fa fa-shopping-cart fa-4x text-muted mb-3"></i>
+            </div>
+            <p class="small text-muted">Configure this block to display your selected products.</p>
+        </div>
     </template>
 </odoo>
