@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <template id="s_product_collection_snippet" name="Product Collection">
-        <section class="s_product_collection_snippet pt32 pb32" data-snippet="s_product_collection_snippet" data-collection-id="">
+        <section class="s_product_collection_snippet js_sale oe_website_sale pt32 pb32" data-snippet="s_product_collection_snippet" data-collection-id="">
             <div class="container">
                 <div class="text-center py-4 collection-placeholder">
                     <h3 class="mb-3">Product Collection</h3>
@@ -12,6 +12,7 @@
                     <p class="small text-muted">In edit mode, click "Select Collection" from the options to choose products.</p>
                 </div>
             </div>
+            <div class="o_product_feature_panel d-none"></div>
         </section>
     </template>
 

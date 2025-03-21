@@ -64,10 +64,15 @@ class CollectionDialog extends Component {
     this.state.error = null;
   }
 
+  cancelDialog() {
+    this.props.close();
+  }
+
   applyCollection() {
     if (this.state.selectedCollection && this.props.onCollectionSelected) {
       this.props.onCollectionSelected(this.state.selectedCollection);
     }
+
     this.props.close();
   }
 }

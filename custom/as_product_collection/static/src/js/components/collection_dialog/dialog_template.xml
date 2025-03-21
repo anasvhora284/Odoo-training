@@ -28,7 +28,7 @@
                 </div>
             </div>
             <t t-set-slot="footer">
-                <button class="btn btn-secondary" t-on-click="props.close">Cancel</button>
+                <button class="btn btn-secondary" t-on-click="cancelDialog">Cancel</button>
                 <button class="btn btn-primary" t-att-disabled="!state.selectedCollection" t-on-click="applyCollection">Apply</button>
             </t>
         </Dialog>
