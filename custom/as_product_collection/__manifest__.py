@@ -36,10 +36,6 @@
         'views/snippets/s_product_collection_snippet/s_product_collection_snippet.xml',
     ],
 
-    'demo': [
-        'demo/product_collection_demo.xml',
-    ],
-
     'assets': {
         'web.assets_frontend': [
             # Website sale dependencies

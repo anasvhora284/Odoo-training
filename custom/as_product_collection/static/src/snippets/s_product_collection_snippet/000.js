@@ -2,6 +2,7 @@
 
 import publicWidget from "@web/legacy/js/public/public_widget";
 import { rpc } from "@web/core/network/rpc";
+import { ProductConfiguratorDialog } from "@sale/js/product_configurator_dialog/product_configurator_dialog";
 
 // Shared wishlist state across all snippet instances
 const globalWishlistState = {
@@ -15,7 +16,7 @@ const globalWishlistState = {
             this.productIDs = JSON.parse(
                 sessionStorage.getItem("website_sale_wishlist_product_ids") || "[]"
             );
-            const res = await fetch("/shop/wishlist", {
+            const res = await fetch("/shop/wishlist?count=1", {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
@@ -60,12 +61,9 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
     selector: ".s_product_collection_snippet",
     events: {
         "click .wishlist_btn_cutom_class": "updateHeaderCounter",
+        "click .js_add_cart_custom": "openConfigDialog",
     },
     disabledInEditableMode: false,
-
-    init() {
-        this._super(...arguments);
-    },
 
     start() {
         this.collectionId =
@@ -181,8 +179,8 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
         const productLink = `/shop/product/${product.product_tmpl_id}`;
 
         col.innerHTML = `
-      <div class="card border-1 rounded-2 h-100 w-100 oe_product_cart js_product" data-product-id="${product.id}" data-product-template-id="${product.product_tmpl_id}">
-        <form class="js_add_cart_variants" action="/shop/cart/update" method="POST">
+      <div class="card border-1 rounded-2 h-100 w-100 oe_product_cart js_product o_carousel_product_card" data-product-id="${product.id}" data-product-template-id="${product.product_tmpl_id}">
+        
           <input type="hidden" name="csrf_token" value="${odoo.csrf_token}"/>
           <input type="hidden" name="product_id" value="${product.id}"/>
           <input type="hidden" name="product_template_id" value="${product.product_tmpl_id}"/>
@@ -207,7 +205,12 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
                     title="Add to Wishlist">
                     <i class="fa fa-heart"></i>
                   </button>
-                  <button type="submit" class="btn btn-primary a-submit js_add_cart" title="Add to Cart">
+                  <button type="submit" class="btn btn-primary a-submit js_add_cart_custom" 
+                    data-product-id="${product.id}"
+                    data-product-template-id="${product.product_tmpl_id}"
+                    data-action="o_add_cart" 
+                    title="Add to Cart" 
+                    aria-label="Add to Cart">
                     <i class="fa fa-shopping-cart"></i>
                   </button>
                   <button type="button" class="btn btn-light o_add_compare d-none d-md-inline-block" 
@@ -221,11 +224,93 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
               </div>
             </div>
           </div>
-        </form>
       </div>
     `;
 
         return col;
+    },
+
+    openConfigDialog(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const productId = parseInt(event.currentTarget.dataset.productId);
+        const productTemplateId = parseInt(event.currentTarget.dataset.productTemplateId);
+        this.notification = this.bindService("notification");
+
+        // Get current website currency
+        const getCurrencyId = () => {
+            // Try to get currency from document if available
+            if (
+                document.body.dataset.mainObject === "website" &&
+                document.body.dataset.websiteCurrencyId
+            ) {
+                return parseInt(document.body.dataset.websiteCurrencyId);
+            }
+
+            // Try from context
+            if (odoo?.session_info?.user_context?.currency_id) {
+                return odoo.session_info.user_context.currency_id;
+            }
+
+            return null; // Will use default currency
+        };
+
+        this.call("dialog", "add", ProductConfiguratorDialog, {
+            productTemplateId: productTemplateId,
+            ptavIds: [],
+            customPtavs: [],
+            quantity: 1,
+            soDate: luxon.DateTime.now().toISO(),
+            currencyId: getCurrencyId(),
+            edit: false,
+            isFrontend: true,
+            options: {
+                isMainProductConfigurable: true,
+                showQuantity: true,
+                showPrice: true,
+            },
+            save: async (mainProduct, optionalProducts, options) => {
+                try {
+                    // Add the product to the cart using website_sale endpoint
+                    const values = await rpc("/shop/cart/update", {
+                        main_product: {
+                            product_template_id: mainProduct.productTemplateId,
+                            product_template_attribute_value_ids: mainProduct.ptavIds,
+                            product_custom_attribute_values:
+                                mainProduct.customPtavs?.map((ptav) => ({
+                                    custom_product_template_attribute_value_id: ptav.id,
+                                    custom_value: ptav.value,
+                                })) || [],
+                            quantity: mainProduct.quantity || 1,
+                        },
+                        optional_products: optionalProducts.map((product) => ({
+                            product_template_id: product.productTemplateId,
+                            product_template_attribute_value_ids: product.ptavIds,
+                            product_custom_attribute_values:
+                                product.customPtavs?.map((ptav) => ({
+                                    custom_product_template_attribute_value_id: ptav.id,
+                                    custom_value: ptav.value,
+                                })) || [],
+                            quantity: product.quantity || 1,
+                        })),
+                    });
+
+                    this.notification?.add("Product added to your cart", {
+                        type: "success",
+                    });
+
+                    this.updateHeaderCounter();
+                } catch (error) {
+                    console.error("Error adding product to cart", error);
+                    this.notification?.add("Failed to add product to cart. Please try again.", {
+                        type: "danger",
+                    });
+                }
+            },
+            discard: () => {},
+            close: () => {},
+        });
     },
 
     updateHeaderCounter() {
