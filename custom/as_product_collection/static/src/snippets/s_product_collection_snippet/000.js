@@ -3,64 +3,11 @@
 import publicWidget from "@web/legacy/js/public/public_widget";
 import { rpc } from "@web/core/network/rpc";
 import { ProductConfiguratorDialog } from "@sale/js/product_configurator_dialog/product_configurator_dialog";
-
-// Shared wishlist state across all snippet instances
-const globalWishlistState = {
-    productIDs: [],
-    initialized: false,
-
-    async init() {
-        if (this.initialized) return;
-
-        try {
-            this.productIDs = JSON.parse(
-                sessionStorage.getItem("website_sale_wishlist_product_ids") || "[]"
-            );
-            const res = await fetch("/shop/wishlist?count=1", {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                },
-            });
-            const data = await res.json();
-            this.productIDs = data;
-            sessionStorage.setItem("website_sale_wishlist_product_ids", JSON.stringify(data));
-            this.updateHeaderCounter();
-            this.initialized = true;
-        } catch (error) {
-            console.error("Error initializing wishlist state", error);
-            this.productIDs = [];
-        }
-    },
-
-    hasProduct(productId) {
-        return this.productIDs.includes(parseInt(productId));
-    },
-
-    updateHeaderCounter() {
-        this.productIDs = JSON.parse(
-            sessionStorage.getItem("website_sale_wishlist_product_ids") || "[]"
-        );
-
-        console.log(this.productIDs, "length:", this.productIDs.length + 1, "updated length");
-        const $wishButton = document.querySelector("header .o_wsale_my_wish");
-        if ($wishButton) {
-            const $count = $wishButton.querySelector(".my_wish_quantity");
-            if ($count) {
-                $count.textContent = this.productIDs.length;
-            }
-
-            if ($wishButton.classList.contains("o_wsale_my_wish_hide_empty")) {
-                $wishButton.classList.toggle("d-none", !this.productIDs.length);
-            }
-        }
-    },
-};
+import wSaleUtils from "@website_sale/js/website_sale_utils";
 
 publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
     selector: ".s_product_collection_snippet",
     events: {
-        "click .wishlist_btn_cutom_class": "updateHeaderCounter",
         "click .js_add_cart_custom": "openConfigDialog",
     },
     disabledInEditableMode: false,
@@ -68,10 +15,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
     start() {
         this.collectionId =
             this.el.dataset.collectionId || this.el.getAttribute("data-collection-id") || false;
-
-        // Initialize wishlist state
-        globalWishlistState.init();
-
         if (this.collectionId && !this.editableMode) {
             return this._renderProducts();
         }
@@ -80,7 +23,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
 
     async _renderProducts() {
         if (!this.collectionId) return;
-
         try {
             const data = await this._getCollectionData();
             this._renderCollectionUI(data);
@@ -101,7 +43,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
                     kwargs: {},
                 }
             );
-
             return {
                 collectionInfo: { name: result.name || "Product Collection" },
                 products: result.products || [],
@@ -148,28 +89,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
         if (placeholder) {
             placeholder.remove();
         }
-
-        // Update wishlist buttons state after rendering
-        this._updateWishlistButtonsState();
-    },
-
-    _updateWishlistButtonsState() {
-        const wishlistButtons = this.el.querySelectorAll(".o_add_wishlist");
-
-        wishlistButtons.forEach((button) => {
-            const productId = parseInt(button.dataset.productProductId);
-            if (globalWishlistState.hasProduct(productId)) {
-                button.classList.add("disabled");
-                button.setAttribute("disabled", "disabled");
-                button.title = "Already in wishlist";
-
-                // Add visual indicator
-                const icon = button.querySelector("i");
-                if (icon) {
-                    icon.classList.add("text-danger");
-                }
-            }
-        });
     },
 
     _createProductCard(product) {
@@ -180,7 +99,6 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
 
         col.innerHTML = `
       <div class="card border-1 rounded-2 h-100 w-100 oe_product_cart js_product o_carousel_product_card" data-product-id="${product.id}" data-product-template-id="${product.product_tmpl_id}">
-        
           <input type="hidden" name="csrf_token" value="${odoo.csrf_token}"/>
           <input type="hidden" name="product_id" value="${product.id}"/>
           <input type="hidden" name="product_template_id" value="${product.product_tmpl_id}"/>
@@ -197,7 +115,7 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
               </div>
               <div class="col-auto p-0">
                 <div class="o_wsale_product_btn d-flex align-items-center gap-2">
-                  <button type="button" class="btn btn-light o_add_wishlist o_add_wishlist_dyn wishlist_btn_cutom_class" 
+                  <button type="button" class="btn btn-light o_add_wishlist o_add_wishlist_dyn" 
                     data-product-template-id="${product.product_tmpl_id}" 
                     data-product-product-id="${product.id}" 
                     data-action="o_wishlist" 
@@ -238,22 +156,17 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
         const productTemplateId = parseInt(event.currentTarget.dataset.productTemplateId);
         this.notification = this.bindService("notification");
 
-        // Get current website currency
         const getCurrencyId = () => {
-            // Try to get currency from document if available
             if (
                 document.body.dataset.mainObject === "website" &&
                 document.body.dataset.websiteCurrencyId
             ) {
                 return parseInt(document.body.dataset.websiteCurrencyId);
             }
-
-            // Try from context
             if (odoo?.session_info?.user_context?.currency_id) {
                 return odoo.session_info.user_context.currency_id;
             }
-
-            return null; // Will use default currency
+            return null;
         };
 
         this.call("dialog", "add", ProductConfiguratorDialog, {
@@ -272,37 +185,54 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
             },
             save: async (mainProduct, optionalProducts, options) => {
                 try {
-                    // Add the product to the cart using website_sale endpoint
-                    const values = await rpc("/shop/cart/update", {
-                        main_product: {
-                            product_template_id: mainProduct.productTemplateId,
-                            product_template_attribute_value_ids: mainProduct.ptavIds,
-                            product_custom_attribute_values:
-                                mainProduct.customPtavs?.map((ptav) => ({
-                                    custom_product_template_attribute_value_id: ptav.id,
-                                    custom_value: ptav.value,
-                                })) || [],
-                            quantity: mainProduct.quantity || 1,
-                        },
-                        optional_products: optionalProducts.map((product) => ({
-                            product_template_id: product.productTemplateId,
-                            product_template_attribute_value_ids: product.ptavIds,
-                            product_custom_attribute_values:
-                                product.customPtavs?.map((ptav) => ({
-                                    custom_product_template_attribute_value_id: ptav.id,
-                                    custom_value: ptav.value,
-                                })) || [],
-                            quantity: product.quantity || 1,
-                        })),
+                    const mainProductData = {
+                        product_id: productId,
+                        product_template_id: productTemplateId,
+                        quantity: mainProduct.quantity || 1,
+                        product_custom_attribute_values:
+                            mainProduct.customPtavs?.map((ptav) => ({
+                                custom_product_template_attribute_value_id: ptav.id,
+                                custom_value: ptav.value,
+                            })) || [],
+                        no_variant_attribute_value_ids: mainProduct.ptavIds || [],
+                    };
+
+                    const optionalProductsData = optionalProducts
+                        .map((product) => {
+                            const variantId = product.id || product.productId || product.product_id;
+                            const templateId =
+                                product.product_tmpl_id ||
+                                product.productTemplateId ||
+                                product.product_template_id;
+
+                            if (!variantId || !templateId) {
+                                console.warn("Missing required IDs for optional product:", product);
+                                return null;
+                            }
+
+                            return {
+                                product_id: variantId,
+                                product_template_id: templateId,
+                                parent_product_template_id: productTemplateId,
+                                quantity: product.quantity || 1,
+                                product_custom_attribute_values:
+                                    product.customPtavs?.map((ptav) => ({
+                                        custom_product_template_attribute_value_id: ptav.id,
+                                        custom_value: ptav.value,
+                                    })) || [],
+                                no_variant_attribute_value_ids: product.ptavIds || [],
+                            };
+                        })
+                        .filter(Boolean);
+
+                    const values = await rpc("website_sale/product_configurator/update_cart", {
+                        main_product: mainProductData,
+                        optional_products: optionalProductsData,
                     });
 
-                    this.notification?.add("Product added to your cart", {
-                        type: "success",
-                    });
-
-                    this.updateHeaderCounter();
+                    this._onConfigured(options, values);
                 } catch (error) {
-                    console.error("Error adding product to cart", error);
+                    console.error("Error adding product to cart:", error);
                     this.notification?.add("Failed to add product to cart. Please try again.", {
                         type: "danger",
                     });
@@ -313,9 +243,13 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
         });
     },
 
-    updateHeaderCounter() {
-        this._updateWishlistButtonsState();
-        globalWishlistState.updateHeaderCounter();
+    _onConfigured(options, values) {
+        if (options && options.goToCart) {
+            window.location.pathname = "/shop/cart";
+        } else {
+            wSaleUtils.updateCartNavBar(values);
+            wSaleUtils.showCartNotification(this.call.bind(this), values.notification_info);
+        }
     },
 
     _showNoProductsMessage(container) {
