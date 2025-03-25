@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View -->
+    <record id="view_color_condition_list" model="ir.ui.view">
+        <field name="name">color.condition.list</field>
+        <field name="model">color.condition</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="domain"/>
+                <field name="background_color" widget="color"/>
+                <field name="text_color" widget="color"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_color_condition_form" model="ir.ui.view">
+        <field name="name">color.condition.form</field>
+        <field name="model">color.condition</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_title"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. High Priority Tasks"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="model_id"/>
+                            <field name="model_name" invisible="1"/>
+                            <field name="domain" widget="domain" options="{'model': 'model_name', 'in_dialog': true}"/>
+                        </group>
+                        <group>
+                            <field name="background_color" widget="color"/>
+                            <field name="text_color" widget="color"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_color_condition" model="ir.actions.act_window">
+        <field name="name">Global Color Filter</field>
+        <field name="res_model">color.condition</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_color_condition"
+              name="Global Color Filter"
+              action="action_color_condition"
+              parent="base.next_id_2"
+              sequence="10"/>
+</odoo> 

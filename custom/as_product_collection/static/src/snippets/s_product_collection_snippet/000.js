@@ -92,18 +92,23 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
     },
 
     _createProductCard(product) {
+        const isInWishlist = sessionStorage.getItem("wishlist")?.includes(product.product_tmpl_id);
         const col = document.createElement("div");
         col.className = "col-12 col-sm-6 col-md-4 col-lg-3 card-column";
 
         const productLink = `/shop/product/${product.product_tmpl_id}`;
 
         col.innerHTML = `
-      <div class="card border-1 rounded-2 h-100 w-100 oe_product_cart js_product o_carousel_product_card" data-product-id="${product.id}" data-product-template-id="${product.product_tmpl_id}">
+      <div class="card border-1 rounded-2 h-100 w-100 oe_product_cart js_product o_carousel_product_card" data-product-id="${
+          product.id
+      }" data-product-template-id="${product.product_tmpl_id}">
           <input type="hidden" name="csrf_token" value="${odoo.csrf_token}"/>
           <input type="hidden" name="product_id" value="${product.id}"/>
           <input type="hidden" name="product_template_id" value="${product.product_tmpl_id}"/>
           <a href="${productLink}" class="text-decoration-none">
-            <img src="${product.image_url}" class="card-img-top object-fit-cover px-0 p-lg-0" alt="${product.name}"/>
+            <img src="${
+                product.image_url
+            }" class="card-img-top object-fit-cover px-0 p-lg-0" alt="${product.name}"/>
           </a>
           <div class="card-body">
             <a href="${productLink}" class="text-decoration-none">
@@ -115,7 +120,10 @@ publicWidget.registry.ProductCollectionSnippet = publicWidget.Widget.extend({
               </div>
               <div class="col-auto p-0">
                 <div class="o_wsale_product_btn d-flex align-items-center gap-2">
-                  <button type="button" class="btn btn-light o_add_wishlist o_add_wishlist_dyn" 
+                  <button type="button" class="btn btn-light o_add_wishlist o_add_wishlist_dyn ${
+                      isInWishlist ? "disabled" : ""
+                  }"
+                    ${isInWishlist ? "disable" : ""}
                     data-product-template-id="${product.product_tmpl_id}" 
                     data-product-product-id="${product.id}" 
                     data-action="o_wishlist" 
