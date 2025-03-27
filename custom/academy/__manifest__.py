@@ -12,7 +12,7 @@
     
     'website': "https://www.yourcompany.com",
 
-    'category': 'Uncategorized',
+    'category': 'Atharva Systems',
 
     'version': '1.0',
 

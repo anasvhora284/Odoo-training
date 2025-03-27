@@ -7,6 +7,7 @@
     'description': """
         Links the real estate and accounting modules together.
     """,
+    'category': 'Atharva Systems',
     'depends': [
         'estate',
         'account',

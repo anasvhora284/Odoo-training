@@ -12,7 +12,7 @@ You can define filters that can be applied globally across different views and g
     'author': "Atharva Systems Pvt. Ltd.",
     'website': "https://www.atharvasystems.com",
     'license': "LGPL-3",
-    'category': 'Filters',
+    'category': 'Atharva Systems',
     'version': '0.1',
     'sequence': 1,
     'application': True,

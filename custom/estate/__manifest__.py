@@ -13,7 +13,7 @@
         * Track property types and tags
         * Manage property sales
     """,
-    'category': 'Real Estate',
+    'category': 'Atharva Systems',
     'depends': ['base', 'web'],
     'data': [
         'security/estate_security.xml',

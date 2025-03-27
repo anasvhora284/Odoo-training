@@ -15,7 +15,7 @@
         * Export Purchase Order to Excel file
         * Show logs of import and export
     """,
-    'category': 'Purchase',
+    'category': 'Atharva Systems',
     'depends': [
         'base',
         'purchase',

@@ -1,7 +1,7 @@
 {
     'name': 'Airproof Website',
     'version': '1.0',
-    'category': 'Website',
+    'category': 'Atharva Systems',
     'author': 'Anas Vhora',
     'summary': 'Custom website theme for Airproof',
     'description': """

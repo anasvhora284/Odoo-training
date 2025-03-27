@@ -13,7 +13,7 @@
         * Track rental requests and history
         * Handle rental pricing and approvals
     """,
-    'category': 'Product Rental Services',
+    'category': 'Atharva Systems',
     'depends': [
         'base',
         'product',

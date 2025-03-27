@@ -16,7 +16,7 @@
     'author': "Atharva System",
     'website': "http://www.atharvasystem.com",
 
-    'category': 'Product',
+    'category': 'Atharva Systems',
     'version': '0.1',
     'sequence': '1',
 
