@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sbodr_request_user,SBODR Request User,model_sbodr_request,base.group_user,1,1,1,0
+access_sbodr_request_manager,SBODR Request Manager,model_sbodr_request,base.group_system,1,1,1,1
+access_sbodr_wizard_user,SBODR Wizard User,model_sbodr_wizard,base.group_user,1,1,1,1
+access_sbodr_wizard_portal,SBODR Wizard Portal,model_sbodr_wizard,base.group_portal,1,1,1,1
