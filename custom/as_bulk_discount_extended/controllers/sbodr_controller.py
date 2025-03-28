@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from math import prod
 from odoo import http
 from odoo.http import request
 
@@ -25,27 +26,21 @@ class SBODRController(http.Controller):
                 'name': '',
                 'email': '',
             }
+    
     @http.route('/sbodr/check_variant', type='json', auth="public")
-    def check_variant(self, product_id=None):
-        """Endpoint to handle variant change events"""
-        print("hello")  # Print hello when a variant changes
-        
+    def check_variant(self, product_id=None):        
         try:
             if not product_id:
                 return {'success': False, 'error': 'No product ID provided'}
                 
-            # Find the product
-            product = request.env['product.product'].sudo().browse(int(product_id))
+            product = request.env['product.product'].browse(int(product_id))
             
             if not product.exists():
                 return {'success': False, 'error': 'Product not found'}
                 
-            # Get website
-            website = request.website
-            
-            # Check if SBODR is enabled for this product
-            is_enabled = website.is_sbodr_button_visible(product)
-            print(f"Product ID: {product_id}, Name: {product.name}, SBODR enabled: {is_enabled}")
+            website = request.env['website'].get_current_website()
+            print(product.type)
+            is_enabled = website.is_sbodr_button_visible(product) and product.type == 'consu'
             
             return {
                 'success': True,
@@ -54,7 +49,6 @@ class SBODRController(http.Controller):
                 'product_id': product.id
             }
         except Exception as e:
-            print(f"Error in check_variant: {e}")
             return {'success': False, 'error': str(e)}
             
     @http.route('/sbodr/submit_request', type='json', auth="public")
@@ -65,7 +59,7 @@ class SBODRController(http.Controller):
                 return {'success': False, 'error': 'No product ID provided'}
                 
             # Find the product
-            product = request.env['product.product'].sudo().browse(int(product_id))
+            product = request.env['product.product'].browse(int(product_id))
             
             if not product.exists():
                 return {'success': False, 'error': 'Product not found'}
@@ -76,6 +70,7 @@ class SBODRController(http.Controller):
             
             # Determine price from list_price (not price)
             product_name = product.name
+            variant_name = product.product_tmpl_id.name  # Get the variant name
             price = product.list_price or 0.0
             
             # Get partner info
@@ -92,11 +87,11 @@ class SBODRController(http.Controller):
             
             # Create a CRM lead with the new name format
             lead = request.env['crm.lead'].sudo().create({
-                'name': f"Bulk Order Discount Request - {product_name} - {full_name}",
+                'name': f"Bulk Order Discount Request - {product_name} ({variant_name}) - {full_name}",
                 'partner_name': full_name,
                 'partner_id': partner.id if partner.exists() else False,
                 'email_from': email,
-                'description': f"Special Bulk Order Discount Request: \nProduct: {product_name}\nQuantity: {quantity}\nRequested Discount: {discount}%\n\nCustomer Message:\n{notes}",
+                'description': f"Special Bulk Order Discount Request: \nProduct: {product_name} ({variant_name})\nQuantity: {quantity}\nRequested Discount: {discount}%\n\nCustomer Message:\n{notes}",
                 'type': 'opportunity',
                 'priority': '2',
                 'expected_revenue': expected_revenue if expected_revenue > 0 else 0.0,
@@ -105,7 +100,7 @@ class SBODRController(http.Controller):
             # Also create SBODR request record if the model exists
             if 'sbodr.request' in request.env:
                 request.env['sbodr.request'].sudo().create({
-                    'name': f"SBODR-{full_name}-{product_name}",
+                    'name': f"SBODR-{full_name}-{product_name} ({variant_name})",
                     'full_name': full_name,
                     'email': email,
                     'quantity': quantity,

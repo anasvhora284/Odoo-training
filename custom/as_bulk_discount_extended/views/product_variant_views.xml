@@ -6,8 +6,7 @@
         <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('oe_title')]/following-sibling::div[@name='options']" position="inside">
-                <field name="is_sbodr_global_enabled" invisible="1"/>
-                <div class="d-inline-flex align-items-center" invisible="not is_sbodr_global_enabled">
+                <div class="d-inline-flex align-items-center" invisible="type != 'consu'">
                     <field name="enable_sbodr" />
                     <label for="enable_sbodr" string="Bulk Order Discount Request (BODR)" class="ms-2"/>
                 </div>

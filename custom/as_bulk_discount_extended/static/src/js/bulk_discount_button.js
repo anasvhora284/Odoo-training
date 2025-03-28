@@ -1,9 +1,10 @@
 /** @odoo-module **/
 import publicWidget from "@web/legacy/js/public/public_widget";
 import { _t } from "@web/core/l10n/translation";
-import { registry } from "@web/core/registry";
 import { BulkDiscountDialog } from "./components/bulk_discount_dialog/bulk_discount_dialog";
 import { discountUtils } from "./utils/discount_utils";
+import { WebsiteSale } from "@website_sale/js/website_sale";
+import { rpc } from "@web/core/network/rpc";
 
 publicWidget.registry.BulkDiscountButton = publicWidget.Widget.extend({
     selector: ".js_sbodr_container",
@@ -12,6 +13,8 @@ publicWidget.registry.BulkDiscountButton = publicWidget.Widget.extend({
     },
 
     start() {
+        const bulkOrderButton = $(".js_sbodr_container");
+        bulkOrderButton.addClass("d-none");
         return this._super.apply(this, arguments);
     },
 
@@ -31,43 +34,25 @@ publicWidget.registry.BulkDiscountButton = publicWidget.Widget.extend({
     },
 });
 
-publicWidget.registry.BulkDiscountVariantHandler = publicWidget.Widget.extend({
-    selector: ".oe_website_sale",
-
-    events: {
-        "change form.js_attributes input, form.js_attributes select":
-            "_onChangeVariantBulkDiscount",
-    },
-
-    start: function () {
-        var def = this._super.apply(this, arguments);
-        this._handleBulkDiscountVisibility();
-        return def;
-    },
-
-    _onChangeVariantBulkDiscount: function () {
-        this._handleBulkDiscountVisibility();
-    },
-
-    _handleBulkDiscountVisibility: function () {
-        const $container = $(".js_sbodr_container");
-        if (!$container.length) return;
-
+publicWidget.registry.WebsiteSale.include({
+    async _getCombinationInfo() {
+        const result = await this._super.apply(this, arguments);
         const productInfo = discountUtils.getProductInfo();
+        this.checkBulkOrderButtonVisible(productInfo.productId);
+        return result;
+    },
 
-        if (productInfo.productId) {
-            discountUtils
-                .checkVariantEligibility(productInfo.productId, productInfo.productTemplateId)
-                .then((response) => {
-                    if (response && response.is_enabled) {
-                        $container.removeClass("d-none");
-                    } else {
-                        // $container.addClass("d-none");
-                    }
-                })
-                .catch(() => {});
+    async checkBulkOrderButtonVisible(productId) {
+        const isBulkOrderButtonVisible = await rpc("/sbodr/check_variant", {
+            product_id: productId,
+        });
+
+        if (isBulkOrderButtonVisible.is_enabled) {
+            const bulkOrderButton = $(".js_sbodr_container");
+            bulkOrderButton.removeClass("d-none");
         } else {
-            // $container.addClass("d-none");
+            const bulkOrderButton = $(".js_sbodr_container");
+            bulkOrderButton.addClass("d-none");
         }
     },
 });
