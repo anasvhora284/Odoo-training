@@ -4,67 +4,27 @@ from odoo import http
 from odoo.http import request
 
 class SBODRController(http.Controller):
-    @http.route('/sbodr/request', type='json', auth="user", methods=["POST"])
-    def sbodr_request(self, full_name, email, quantity, discount, description, **kw):
-        # Get product info from session (current product)
-        product_id = request.session.get('sale_order_last_product_id')
-        product = request.env['product.product'].browse(product_id) if product_id else False
-        
-        # Get user/partner information
+    @http.route('/sbodr/get_user_info', type='json', auth="public")
+    def get_user_info(self):
+        """Get current user information for the bulk discount dialog"""
         user = request.env.user
-        partner = user.partner_id
+        is_logged_in = not user._is_public()
         
-        # Determine price and product information
-        product_name = product.name if product else "Unknown Product"
-        price = product.list_price if product else 100.0
-        
-        # Calculate expected revenue
-        expected_revenue = quantity * price * ((100 - float(discount)) / 100)
-        
-        # Create a CRM lead
-        lead = request.env['crm.lead'].create({
-            'name': f"Bulk Order Discount Request - {product_name}",
-            'partner_name': full_name,
-            'partner_id': partner.id if partner else False,
-            'email_from': email,
-            'description': f"""
-Special Bulk Order Discount Request:
-Product: {product_name}
-Quantity: {quantity}
-Requested Discount: {discount}%
-
-Customer Message:
-{description}
-            """,
-            'sbodr_description': description,
-            'sbodr_discount': float(discount),
-            'sbodr_quantity': quantity,
-            'expected_revenue': expected_revenue,
-            'type': 'opportunity',
-            'priority': '2',
-        })
-        
-        # Also create SBODR request record for tracking
-        request.env['sbodr.request'].create({
-            'name': f"SBODR-{full_name}-{product_name}",
-            'full_name': full_name,
-            'email': email,
-            'quantity': quantity,
-            'discount': float(discount),
-            'description': description,
-            'state': 'submitted',
-        })
-        
-        # Return success with rainbow man effect
-        return {
-            'status': 'success',
-            'effect': {
-                'effect': 'rainbow_man',
-                'message': 'Thank you! We will get back to you shortly.',
-                'img_url': '/web/static/img/smile.svg',
+        if is_logged_in:
+            partner = user.partner_id
+            return {
+                'is_logged_in': True,
+                'name': partner.name,
+                'email': partner.email,
+                'user_id': user.id,
+                'partner_id': partner.id,
             }
-        }
-        
+        else:
+            return {
+                'is_logged_in': False,
+                'name': '',
+                'email': '',
+            }
     @http.route('/sbodr/check_variant', type='json', auth="public")
     def check_variant(self, product_id=None):
         """Endpoint to handle variant change events"""
@@ -136,15 +96,7 @@ Customer Message:
                 'partner_name': full_name,
                 'partner_id': partner.id if partner.exists() else False,
                 'email_from': email,
-                'description': f"""
-Special Bulk Order Discount Request:
-Product: {product_name}
-Quantity: {quantity}
-Requested Discount: {discount}%
-
-Customer Message:
-{notes}
-                """,
+                'description': f"Special Bulk Order Discount Request: \nProduct: {product_name}\nQuantity: {quantity}\nRequested Discount: {discount}%\n\nCustomer Message:\n{notes}",
                 'type': 'opportunity',
                 'priority': '2',
                 'expected_revenue': expected_revenue if expected_revenue > 0 else 0.0,

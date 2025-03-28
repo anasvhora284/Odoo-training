@@ -26,3 +26,9 @@ class ProductProduct(models.Model):
         
         for product in self:
             product.is_sbodr_global_enabled = enabled
+    
+    @api.model
+    def _is_sbodr_enabled_on_website(self):
+        """Check if SBODR is enabled in the current website settings"""
+        website = self.env['website'].get_current_website()
+        return website.enable_sbodr

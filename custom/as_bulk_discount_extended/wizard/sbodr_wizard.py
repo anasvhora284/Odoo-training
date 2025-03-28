@@ -20,5 +20,4 @@ class SBODRWizard(models.TransientModel):
             'sbodr_discount': self.discount,
             'expected_revenue': self.quantity * self.product_id.list_price * ((100 - self.discount) / 100),
         })
-
         

@@ -2,7 +2,7 @@
 <odoo>
     <template id="product_add_to_cart_button" inherit_id="website_sale.product">
         <xpath expr="//div[@id='add_to_cart_wrap']" position="after">
-            <div t-att-class="'d-inline-flex align-items-center mb-2 me-auto js_sbodr_container'">
+            <div t-if="product and website.is_sbodr_button_visible(product)" class="d-inline-flex align-items-center js_sbodr_container mb-2 me-auto">
                 <a role="button" href="#" class="btn btn-secondary js_sbodr_request w-100">
                     <i class="fa fa-tags me-1"></i> Request Bulk Discount
                 </a>
