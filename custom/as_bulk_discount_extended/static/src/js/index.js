@@ -1,10 +1,6 @@
 /** @odoo-module **/
 
-import { registry } from "@web/core/registry";
-import { BulkDiscountDialog } from "./components/bulk_discount_dialog/bulk_discount_dialog";
+import { SBODRWizard } from "./component/sbodr_wizard/sbodr_wizard";
+import "./component/sbodr_wizard/init_sbodr_button";
 
-// Register components
-registry.category("components").add("BulkDiscountDialog", BulkDiscountDialog);
-
-// Import widgets to ensure they are registered
-import "./bulk_discount_button";
+export { SBODRWizard };

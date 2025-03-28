@@ -39,11 +39,9 @@
     ],
     'assets': {
         'web.assets_frontend': [
-            'as_bulk_discount_extended/static/src/js/components/bulk_discount_dialog/bulk_discount_dialog.xml',
-            'as_bulk_discount_extended/static/src/js/utils/discount_utils.js',
-            'as_bulk_discount_extended/static/src/js/components/bulk_discount_dialog/bulk_discount_dialog.js',
-            'as_bulk_discount_extended/static/src/js/bulk_discount_button.js',
             'as_bulk_discount_extended/static/src/js/index.js',
+            'as_bulk_discount_extended/static/src/js/component/sbodr_wizard/sbodr_wizard.js',
+            'as_bulk_discount_extended/static/src/js/component/sbodr_wizard/init_sbodr_button.js',
         ],
     },
     
