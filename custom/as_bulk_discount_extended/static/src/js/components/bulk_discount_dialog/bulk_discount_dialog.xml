@@ -94,7 +94,7 @@
             <t t-set-slot="footer">
                 <button class="btn btn-secondary" t-on-click="props.close">Cancel</button>
                 <div t-if="state.isLoggedIn" class="d-flex justify-content-end">
-                    <button class="btn btn-primary ms-2" t-on-click="submitRequest" t-att-disabled="state.isSubmitting">
+                    <button class="btn btn-primary ms-2" t-on-click="validateAndSubmit" t-att-disabled="state.isSubmitting">
                         <t t-if="state.isSubmitting">
                             <i class="fa fa-spinner fa-spin me-1"></i> Submitting...
                         </t>

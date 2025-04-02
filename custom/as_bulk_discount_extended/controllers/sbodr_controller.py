@@ -65,8 +65,7 @@ class SBODRController(http.Controller):
             user = request.env.user
             partner = user.partner_id
             
-            product_name = product.name
-            variant_name = product.product_tmpl_id.name
+            product_name = product.display_name
             price = product.list_price or 0.0
             
             full_name = partner.name if partner else 'Website Visitor'
@@ -80,11 +79,11 @@ class SBODRController(http.Controller):
                 expected_revenue = 0.0
             
             lead = request.env['crm.lead'].sudo().create({
-                'name': f"Bulk Order Discount Request - {product_name} ({variant_name}) - {full_name}",
+                'name': f"Bulk Order Discount Request - {product_name} - {full_name}",
                 'partner_name': full_name,
                 'partner_id': partner.id if partner.exists() else False,
                 'email_from': email,
-                'description': f"Special Bulk Order Discount Request: \nProduct: {product_name} ({variant_name})\nQuantity: {quantity}\nRequested Discount: {discount}%\n\nCustomer Message:\n{notes}",
+                'description': f"Special Bulk Order Discount Request: \nProduct: {product_name}\nQuantity: {quantity}\nRequested Discount: {discount}%\n\nCustomer Message:\n{notes}",
                 'type': 'opportunity',
                 'priority': '2',
                 'expected_revenue': expected_revenue if expected_revenue > 0 else 0.0,
@@ -92,7 +91,7 @@ class SBODRController(http.Controller):
             
             if 'sbodr.request' in request.env:
                 request.env['sbodr.request'].sudo().create({
-                    'name': f"SBODR-{full_name}-{product_name} ({variant_name})",
+                    'name': f"SBODR-{full_name}-{product_name}",
                     'full_name': full_name,
                     'email': email,
                     'quantity': quantity,
