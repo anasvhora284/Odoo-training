@@ -11,7 +11,6 @@
 
                     <div t-else="">
                         <div class="row">
-                            <!-- Product image on the left -->
                             <div class="col-md-4 mb-4 d-flex justify-content-center">
                                 <div class="product-image-container d-flex justify-content-center text-center">
                                     <img t-att-src="props.productImage || '/web/static/img/placeholder.png'" class="img-fluid object-fit-contain rounded shadow-sm" t-att-alt="props.productName"/>
@@ -19,7 +18,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Form on the right -->
                             <div class="col-md-8">
                                 <div class="form-container">
                                     <div class="mb-3">

@@ -25,7 +25,6 @@ publicWidget.registry.BulkDiscountButton = publicWidget.Widget.extend({
         const productInfo = discountUtils.getProductInfo();
         console.log("Product Info:", productInfo);
 
-        // Use the service to open the dialog
         const dialogService = this.bindService("dialog");
         dialogService.add(BulkDiscountDialog, {
             productId: productInfo.productId,

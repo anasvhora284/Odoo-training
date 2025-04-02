@@ -65,7 +65,6 @@ export class BulkDiscountDialog extends Component {
     }
 
     validateAndSubmit() {
-        // Reset errors
         this.state.formError = "";
         this.state.errors = {
             fullName: "",
@@ -77,13 +76,11 @@ export class BulkDiscountDialog extends Component {
 
         let isValid = true;
 
-        // Validate full name
         if (!this.state.fullName.trim()) {
             this.state.errors.fullName = "Full name is required";
             isValid = false;
         }
 
-        // Validate email
         if (!this.state.email.trim()) {
             this.state.errors.email = "Email is required";
             isValid = false;
@@ -92,7 +89,6 @@ export class BulkDiscountDialog extends Component {
             isValid = false;
         }
 
-        // Validate quantity
         if (!this.state.quantity) {
             this.state.errors.quantity = "Quantity is required";
             isValid = false;
@@ -104,7 +100,6 @@ export class BulkDiscountDialog extends Component {
             isValid = false;
         }
 
-        // Validate discount
         if (!this.state.discount) {
             this.state.errors.discount = "Discount is required";
             isValid = false;
@@ -116,7 +111,6 @@ export class BulkDiscountDialog extends Component {
             isValid = false;
         }
 
-        // Validate notes
         if (!this.state.notes.trim()) {
             this.state.errors.notes = "Please explain why you need this discount";
             isValid = false;
@@ -130,7 +124,6 @@ export class BulkDiscountDialog extends Component {
             return;
         }
 
-        // If validation passes, submit the request
         this.submitRequest();
     }
 
