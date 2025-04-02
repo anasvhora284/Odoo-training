@@ -34,14 +34,11 @@
         'views/website_settings_views.xml',
         'views/product_variant_views.xml',
         'views/website_sale_templates.xml',
-        'views/sbodr_wizard_views.xml',
-        'data/sbodr_data.xml',
     ],
     'assets': {
         'web.assets_frontend': [
             'as_bulk_discount_extended/static/src/js/index.js',
-            'as_bulk_discount_extended/static/src/js/component/sbodr_wizard/sbodr_wizard.js',
-            'as_bulk_discount_extended/static/src/js/component/sbodr_wizard/init_sbodr_button.js',
+            'as_bulk_discount_extended/static/src/js/**/*',
         ],
     },
     

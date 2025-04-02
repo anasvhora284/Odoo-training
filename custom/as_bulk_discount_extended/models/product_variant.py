@@ -20,7 +20,6 @@ class ProductProduct(models.Model):
     
     def _compute_is_sbodr_global_enabled(self):
         """Check if SBODR is enabled in the website settings"""
-        # Use the first active website with SBODR enabled
         website_with_sbodr = self.env['website'].search([('enable_sbodr', '=', True)], limit=1)
         enabled = bool(website_with_sbodr)
         

@@ -3,8 +3,9 @@ import publicWidget from "@web/legacy/js/public/public_widget";
 import { _t } from "@web/core/l10n/translation";
 import { BulkDiscountDialog } from "./components/bulk_discount_dialog/bulk_discount_dialog";
 import { discountUtils } from "./utils/discount_utils";
-import { WebsiteSale } from "@website_sale/js/website_sale";
 import { rpc } from "@web/core/network/rpc";
+
+console.log("Bulk Discount Button Loaded");
 
 publicWidget.registry.BulkDiscountButton = publicWidget.Widget.extend({
     selector: ".js_sbodr_container",
@@ -13,6 +14,7 @@ publicWidget.registry.BulkDiscountButton = publicWidget.Widget.extend({
     },
 
     start() {
+        console.log("Bulk Discount Button Widget Loaded Inside");
         const bulkOrderButton = $(".js_sbodr_container");
         bulkOrderButton.addClass("d-none");
         return this._super.apply(this, arguments);

@@ -49,12 +49,18 @@ export class BulkDiscountDialog extends Component {
                 this.state.fullName = result.name || "";
                 this.state.email = result.email || "";
                 this.state.isLoggedIn = result.is_logged_in || false;
+                if (!this.state.isLoggedIn) {
+                    throw new Error("User is not logged in");
+                }
             }
         } catch (error) {
+            if (error.message === "User is not logged in") {
+                this.state.isLoading = false;
+                this.state.size = "md";
+            }
             console.error("Error loading user info:", error);
         } finally {
             this.state.isLoading = false;
-            this.state.size = "md";
         }
     }
 

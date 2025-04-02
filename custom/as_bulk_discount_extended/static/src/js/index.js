@@ -1,6 +1,5 @@
 /** @odoo-module **/
+import { BulkDiscountDialog } from "./components/bulk_discount_dialog/bulk_discount_dialog";
+import "./bulk_discount_button.js";
 
-import { SBODRWizard } from "./component/sbodr_wizard/sbodr_wizard";
-import "./component/sbodr_wizard/init_sbodr_button";
-
-export { SBODRWizard };
+export { BulkDiscountDialog };

@@ -39,7 +39,6 @@ class SBODRController(http.Controller):
                 return {'success': False, 'error': 'Product not found'}
                 
             website = request.env['website'].get_current_website()
-            print(product.type)
             is_enabled = website.is_sbodr_button_visible(product) and product.type == 'consu'
             
             return {
@@ -58,26 +57,21 @@ class SBODRController(http.Controller):
             if not product_id:
                 return {'success': False, 'error': 'No product ID provided'}
                 
-            # Find the product
             product = request.env['product.product'].browse(int(product_id))
             
             if not product.exists():
                 return {'success': False, 'error': 'Product not found'}
             
-            # Get user/partner information
             user = request.env.user
             partner = user.partner_id
             
-            # Determine price from list_price (not price)
             product_name = product.name
-            variant_name = product.product_tmpl_id.name  # Get the variant name
+            variant_name = product.product_tmpl_id.name
             price = product.list_price or 0.0
             
-            # Get partner info
             full_name = partner.name if partner else 'Website Visitor'
             email = partner.email if partner else request.env.user.email
             
-            # Calculate expected revenue - ensure it's a valid number
             try:
                 qty = int(quantity) if quantity else 0
                 disc = float(discount) if discount else 0
@@ -85,7 +79,6 @@ class SBODRController(http.Controller):
             except (ValueError, TypeError):
                 expected_revenue = 0.0
             
-            # Create a CRM lead with the new name format
             lead = request.env['crm.lead'].sudo().create({
                 'name': f"Bulk Order Discount Request - {product_name} ({variant_name}) - {full_name}",
                 'partner_name': full_name,
@@ -97,7 +90,6 @@ class SBODRController(http.Controller):
                 'expected_revenue': expected_revenue if expected_revenue > 0 else 0.0,
             })
             
-            # Also create SBODR request record if the model exists
             if 'sbodr.request' in request.env:
                 request.env['sbodr.request'].sudo().create({
                     'name': f"SBODR-{full_name}-{product_name} ({variant_name})",
